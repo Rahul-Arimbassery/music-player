@@ -87,11 +87,11 @@ class _HomePageState extends State<HomePage> {
                           child: InkWell(
                             onTap: () {
                               //Play using a miniplayer
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => const NowPlaying()),
-                              // );
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const NowPlaying()),
+                              );
                               // Navigator.push(
                               //   context,
                               //   MaterialPageRoute(
