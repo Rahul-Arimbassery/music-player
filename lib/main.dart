@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:musicuitest/pages/navigatorpage.dart';
+//import 'package:musicuitest/pages/miniplayer.dart';
+//import 'package:musicuitest/pages/navigatorpage.dart';
+//import 'package:musicuitest/pages/nowplaying.dart';
 import 'package:musicuitest/splash.dart';
 
 void main() {

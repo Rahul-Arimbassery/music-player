@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:musicuitest/pages/miniplayer.dart';
+import 'package:musicuitest/pages/nowplaying.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -15,7 +16,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-            appBar: AppBar(
+      appBar: AppBar(
         backgroundColor: Colors.white,
         title: Row(
           children: [
@@ -48,12 +49,9 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-
       backgroundColor: const Color.fromARGB(255, 251, 251, 252),
       body: SafeArea(
-        child: _isGrid
-            ? _buildGridView()
-            : _buildListView(),
+        child: _isGrid ? _buildGridView() : _buildListView(),
       ),
     );
   }
@@ -89,6 +87,41 @@ class _HomePageState extends State<HomePage> {
                           child: InkWell(
                             onTap: () {
                               //Play using a miniplayer
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => const NowPlaying()),
+                              // );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => const MiniPlayer()),
+                              // );
+                              
+                              // showDialog(
+                              //   context: context,
+                              //   barrierDismissible: true,
+                              //   builder: (BuildContext context) {
+                              //     return Semantics(
+                              //       child: Stack(
+                              //         children: const [
+                              //           Positioned(
+                              //             top: 440,
+                              //             right: 0,
+                              //             left: 0,
+                              //             child: AlertDialog(
+                              //               backgroundColor: Color.fromARGB(
+                              //                   255, 254, 254, 253),
+                              //               content: MiniPlayer(),
+                              //               actions: [],
+                              //             ),
+                              //           ),
+                              //         ],
+                              //       ),
+                              //     );
+                              //   },
+                              // );
+
                             },
                             child: ListTile(
                               leading: Image.asset(
