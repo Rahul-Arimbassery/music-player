@@ -17,27 +17,23 @@ class _NowPlayingState extends State<NowPlaying> {
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 233, 230, 230),
         title: Container(
-          width: 370,
+          width: 220,
+          height: 40,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20),
             color: const Color.fromARGB(255, 251, 249, 249),
           ),
-          child: Row(
+          child: const Row(
             children: [
-              IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.arrow_circle_left),
-                color: Colors.black,
+              SizedBox(
+                width: 55,
               ),
-              const SizedBox(
-                width: 78,
-              ),
-              const Text(
+              Text(
                 "Now Playing",
                 style: TextStyle(color: Colors.black),
               ),
-              const SizedBox(
-                width: 75,
+              SizedBox(
+                width: 48,
               ),
             ],
           ),
@@ -50,7 +46,7 @@ class _NowPlayingState extends State<NowPlaying> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Container(
-                  width: 370,
+                  width: 320,
                   height: 300,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40),
@@ -78,7 +74,7 @@ class _NowPlayingState extends State<NowPlaying> {
               Padding(
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Container(
-                  width: 370,
+                  width: 320,
                   height: 30,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(40),
@@ -109,8 +105,8 @@ class _NowPlayingState extends State<NowPlaying> {
                 child: Row(
                   children: [
                     Container(
-                      width: 60,
-                      height: 50,
+                      width: 50,
+                      height: 40,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(40),
                         color: const Color.fromARGB(255, 239, 234, 234),
@@ -147,7 +143,7 @@ class _NowPlayingState extends State<NowPlaying> {
                       width: 10,
                     ),
                     Container(
-                      width: 120,
+                      width: 80,
                       height: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(40),
@@ -185,8 +181,8 @@ class _NowPlayingState extends State<NowPlaying> {
                       width: 10,
                     ),
                     Container(
-                      width: 60,
-                      height: 50,
+                      width: 50,
+                      height: 40,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(40),
                         color: const Color.fromARGB(255, 239, 234, 234),
@@ -206,7 +202,7 @@ class _NowPlayingState extends State<NowPlaying> {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 70, right: 20, top: 20),
+            padding: const EdgeInsets.only(left: 40, right: 20, top: 20),
             child: Row(
               children: [
                 Column(

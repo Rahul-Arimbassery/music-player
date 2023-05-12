@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+   const SettingsPage({super.key});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -13,8 +13,145 @@ class _SettingsPageState extends State<SettingsPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text("Settings",style: TextStyle(color: Colors.black),),
+        title: const Text(
+          "Settings",
+          style: TextStyle(color: Colors.black),
+        ),
+      ),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('About us'),
+                        content: const Text('About us'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  child: const Row(
+                    children: [
+                      Icon(Icons.person_3),
+                      SizedBox(width: 8),
+                      Text('About us'),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30,),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Share'),
+                        content: const Text('Share'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  child: const Row(
+                    children: [
+                      Icon(Icons.share),
+                      SizedBox(width: 8),
+                      Text('Share'),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30,),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Privacy'),
+                        content: const Text('Privacy'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  child: const Row(
+                    children: [
+                      Icon(Icons.privacy_tip),
+                      SizedBox(width: 8),
+                      Text('Privacy'),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30,),
+              GestureDetector(
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Terms and conditions'),
+                        content: const Text('Terms and conditions.'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('Close'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: Container(
+                  child: const Row(
+                    children: [
+                      Icon(Icons.policy),
+                      SizedBox(width: 8),
+                      Text('Terms and conditions'),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 30,),
+            ],
+          ),
+        ),
       ),
     );
   }
 }
+

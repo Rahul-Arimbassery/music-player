@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:musicuitest/pages/miniplayer.dart';
+import 'package:musicuitest/pages/addplayltist.dart';
+//import 'package:musicuitest/pages/miniplayer.dart';
 import 'package:musicuitest/pages/nowplaying.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,6 +13,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // int _currentIndex = 0;
   bool _isGrid = false; // new variable to keep track of the view mode
+  List<bool> _isPressedList =
+      List.generate(12, (_) => false); // Assuming you have 12 ListTiles
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                               //   MaterialPageRoute(
                               //       builder: (context) => const MiniPlayer()),
                               // );
-                              
+
                               // showDialog(
                               //   context: context,
                               //   barrierDismissible: true,
@@ -121,7 +124,6 @@ class _HomePageState extends State<HomePage> {
                               //     );
                               //   },
                               // );
-
                             },
                             child: ListTile(
                               leading: Image.asset(
@@ -136,11 +138,34 @@ class _HomePageState extends State<HomePage> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
-                                    icon: const Icon(Icons.favorite),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isPressedList[index] =
+                                            !_isPressedList[index];
+                                      });
+                                    },
+                                    icon: Container(
+                                      color: _isPressedList[index]
+                                          ? Colors.white
+                                          : Colors.transparent,
+                                      child: Icon(
+                                        Icons.favorite,
+                                        color: _isPressedList[index]
+                                            ? Colors.red
+                                            : Colors.grey,
+                                      ),
+                                    ),
                                   ),
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AddPlaylistPage(),
+                                        ),
+                                      );
+                                    },
                                     icon: const Icon(Icons.playlist_add),
                                   ),
                                 ],
@@ -174,69 +199,98 @@ class _HomePageState extends State<HomePage> {
               children: List.generate(12, (index) {
                 return Material(
                   color: const Color.fromARGB(255, 252, 252, 252),
-                  elevation: 20, // add an elevation of 4
+                  elevation: 20, // add an elevation of 20
                   shadowColor: const Color.fromARGB(255, 123, 122, 119),
                   borderRadius: BorderRadius.circular(15.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color.fromARGB(255, 145, 145, 146),
-                        style: BorderStyle.solid,
-                        width: 1,
+                  child: InkWell(
+                    onTap: () {
+                      //Play using a miniplayer
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const NowPlaying()),
+                      );
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color.fromARGB(255, 145, 145, 146),
+                          style: BorderStyle.solid,
+                          width: 1,
+                        ),
+                        borderRadius: BorderRadius.circular(15.0),
                       ),
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Center(
-                            child: Image.asset(
-                              "asset/images/music-band.png",
-                              fit: BoxFit.fitWidth,
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: Center(
+                              child: Image.asset(
+                                "asset/images/music-band.png",
+                                fit: BoxFit.fitWidth,
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'Song ${index + 1}',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: const EdgeInsets.all(5.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Song ${index + 1}',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Description of item ${index + 1}',
+                                  style: const TextStyle(
+                                    color: Color.fromARGB(255, 5, 5, 5),
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                                                      IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _isPressedList[index] =
+                                            !_isPressedList[index];
+                                      });
+                                    },
+                                    icon: Container(
+                                      color: _isPressedList[index]
+                                          ? Colors.white
+                                          : Colors.transparent,
+                                      child: Icon(
+                                        Icons.favorite,
+                                        color: _isPressedList[index]
+                                            ? Colors.red
+                                            : Colors.grey,
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(
-                                    width: 30,
-                                  ),
-                                  Row(
-                                    children: [
-                                      IconButton(
-                                        onPressed: () {
-                                          // add to favorites
-                                        },
-                                        icon: const Icon(
-                                          Icons.favorite,
-                                          size: 20,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              Text(
-                                'Description of item ${index + 1}',
-                                style: const TextStyle(
-                                  color: Color.fromARGB(255, 5, 5, 5),
+                                    IconButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                AddPlaylistPage(),
+                                          ),
+                                        );
+                                      },
+                                      icon: const Icon(Icons.playlist_add),
+                                    ),
+                                  ],
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );
