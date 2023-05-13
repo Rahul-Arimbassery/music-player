@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:musicuitest/functions/listview.dart';
+
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({super.key});
@@ -15,6 +17,7 @@ class _FavoritePageState extends State<FavoritePage> {
         backgroundColor: Colors.white,
         title: const Text("Favorite Songs",style: TextStyle(color: Colors.black),),
       ),
+      body: const ListViewPage(),
     );
   }
 }

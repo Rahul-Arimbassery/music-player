@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicuitest/functions/recent.dart';
 
 class MostPlayedPage extends StatefulWidget {
   const MostPlayedPage({super.key});
@@ -15,6 +16,7 @@ class _MostPlayedPageState extends State<MostPlayedPage> {
         backgroundColor: Colors.white,
         title: const Text("Most Played",style: TextStyle(color: Colors.black),),
       ),
+      body: const RecentPageDisplay(),
     );
   }
 }

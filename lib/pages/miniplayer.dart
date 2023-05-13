@@ -51,7 +51,7 @@ class MiniPlayer extends StatelessWidget {
       width: 350,
       height: 60,
       decoration: BoxDecoration(
-        color: Color.fromARGB(255, 252, 251, 251),
+        color: const Color.fromARGB(255, 252, 251, 251),
         borderRadius: BorderRadius.circular(15),
       ),
       child: Row(
@@ -62,10 +62,10 @@ class MiniPlayer extends StatelessWidget {
             backgroundImage: AssetImage('assets/avatar.png'),
           ),
           const SizedBox(width: 6),
-          Column(
+          const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children:[
               Text(
                 'Song Name',
                 style: TextStyle(

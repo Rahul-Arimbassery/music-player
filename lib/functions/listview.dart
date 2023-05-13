@@ -3,15 +3,15 @@ import 'package:musicuitest/pages/addplayltist.dart';
 //import 'package:musicuitest/pages/miniplayer.dart';
 import 'package:musicuitest/pages/nowplaying.dart';
 
-class HomePage extends StatefulWidget {
+class ListViewPage extends StatefulWidget {
   
-  const HomePage({super.key});
+  const ListViewPage({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<ListViewPage> createState() => _ListViewPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _ListViewPageState extends State<ListViewPage> {
 
   // int _currentIndex = 0;
   bool _isGrid = false; // new variable to keep track of the view mode
@@ -21,39 +21,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        title: Row(
-          children: [
-            const Text(
-              'All Songs',
-              style: TextStyle(color: Colors.black),
-            ),
-            const SizedBox(
-              width: 140,
-            ),
-            IconButton(
-              icon: const Icon(Icons.search),
-              color: Colors.black,
-              onPressed: () {
-                // Implement your search functionality here
-              },
-            ),
-            IconButton(
-              color: Colors.black,
-              icon: _isGrid
-                  ? const Icon(Icons.view_list)
-                  : const Icon(Icons
-                      .grid_view), // toggle the icon based on the view mode
-              onPressed: () {
-                setState(() {
-                  _isGrid = !_isGrid; // toggle the view mode
-                });
-              },
-            ),
-          ],
-        ),
-      ),
       backgroundColor: const Color.fromARGB(255, 251, 251, 252),
       body: SafeArea(
         child: _isGrid ? _buildGridView() : _buildListView(),
@@ -70,7 +37,7 @@ class _HomePageState extends State<HomePage> {
             child: Stack(
               children: [
                 ListView.separated(
-                  itemCount: 12, // set the number of ListTiles to create
+                  itemCount: 4, // set the number of ListTiles to create
                   separatorBuilder: (BuildContext context, int index) {
                     return const SizedBox(
                       height:
@@ -154,7 +121,7 @@ class _HomePageState extends State<HomePage> {
                                         Icons.favorite,
                                         color: _isPressedList[index]
                                             ? Colors.red
-                                            : Colors.grey,
+                                            : const Color.fromARGB(255, 215, 4, 4),
                                       ),
                                     ),
                                   ),

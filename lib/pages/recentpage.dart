@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:musicuitest/functions/listview.dart';
+import 'package:musicuitest/functions/recent.dart';
 
 class RecentPage extends StatefulWidget {
   const RecentPage({super.key});
@@ -13,8 +15,9 @@ class _RecentPageState extends State<RecentPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: const Text("Recent Songs",style: TextStyle(color: Colors.black),),
+        title: const Text("Recent Songs",style: TextStyle(color: Colors.black),),       
       ),
+      body: const RecentPageDisplay(),
     );
   }
 }
