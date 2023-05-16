@@ -4,7 +4,6 @@ import 'package:musicuitest/pages/addplayltist.dart';
 import 'package:musicuitest/pages/nowplaying.dart';
 
 class HomePage extends StatefulWidget {
-  
   const HomePage({super.key});
 
   @override
@@ -12,7 +11,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   // int _currentIndex = 0;
   bool _isGrid = false; // new variable to keep track of the view mode
   List<bool> _isPressedList =
@@ -22,25 +20,29 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        shadowColor: const Color.fromARGB(255, 27, 164, 179),
+        elevation: 10,
+        backgroundColor: Colors.black,
         title: Row(
           children: [
             const Text(
               'All Songs',
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(
+                color: Color.fromARGB(255, 27, 164, 179),    
+              ),
             ),
             const SizedBox(
               width: 140,
             ),
             IconButton(
               icon: const Icon(Icons.search),
-              color: Colors.black,
+              color: Colors.white,
               onPressed: () {
                 // Implement your search functionality here
               },
             ),
             IconButton(
-              color: Colors.black,
+              color: Colors.white,
               icon: _isGrid
                   ? const Icon(Icons.view_list)
                   : const Icon(Icons
@@ -139,12 +141,69 @@ class _HomePageState extends State<HomePage> {
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  // IconButton(
+                                  //   onPressed: () {
+                                  //     setState(() {
+                                  //       _isPressedList[index] =
+                                  //           !_isPressedList[index];
+                                  //     });
+                                  //   },
+                                  //   icon: Container(
+                                  //     color: _isPressedList[index]
+                                  //         ? Colors.white
+                                  //         : Colors.transparent,
+                                  //     child: Icon(
+                                  //       Icons.favorite,
+                                  //       color: _isPressedList[index]
+                                  //           ? const Color.fromARGB(255, 27, 164, 179)
+                                  //           : Colors.grey,
+                                  //     ),
+                                  //   ),
+                                  // ),
                                   IconButton(
                                     onPressed: () {
                                       setState(() {
                                         _isPressedList[index] =
                                             !_isPressedList[index];
                                       });
+
+                                      if (_isPressedList[index]) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) { 
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'Added to Favorites'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: const Text('OK'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      } else {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'Removed from Favorites'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: const Text('OK'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      }
                                     },
                                     icon: Container(
                                       color: _isPressedList[index]
@@ -153,11 +212,14 @@ class _HomePageState extends State<HomePage> {
                                       child: Icon(
                                         Icons.favorite,
                                         color: _isPressedList[index]
-                                            ? Colors.red
-                                            : Colors.grey,
+                                            ? const Color.fromARGB(
+                                                255, 27, 164, 179)
+                                            : const Color.fromARGB(
+                                                255, 139, 135, 135),
                                       ),
                                     ),
                                   ),
+
                                   IconButton(
                                     onPressed: () {
                                       Navigator.push(
@@ -269,7 +331,8 @@ class _HomePageState extends State<HomePage> {
                                         child: Icon(
                                           Icons.favorite,
                                           color: _isPressedList[index]
-                                              ? Colors.red
+                                              ? const Color.fromARGB(
+                                                  255, 27, 164, 179)
                                               : Colors.grey,
                                         ),
                                       ),

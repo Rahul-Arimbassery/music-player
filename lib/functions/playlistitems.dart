@@ -3,15 +3,15 @@ import 'package:musicuitest/pages/addplayltist.dart';
 //import 'package:musicuitest/pages/miniplayer.dart';
 import 'package:musicuitest/pages/nowplaying.dart';
 
-class RecentPageDisplay extends StatefulWidget {
+class PlayListItems extends StatefulWidget {
   
-  const RecentPageDisplay({super.key});
+  const PlayListItems({super.key});
 
   @override
-  State<RecentPageDisplay> createState() => _RecentPageDisplayState();
+  State<PlayListItems> createState() => _PlayListItemsState();
 }
 
-class _RecentPageDisplayState extends State<RecentPageDisplay> {
+class _PlayListItemsState extends State<PlayListItems> {
 
   // int _currentIndex = 0;
   bool _isGrid = false; // new variable to keep track of the view mode
@@ -106,69 +106,12 @@ class _RecentPageDisplayState extends State<RecentPageDisplay> {
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // IconButton(
-                                  //   onPressed: () {
-                                  //     setState(() {
-                                  //       _isPressedList[index] =
-                                  //           !_isPressedList[index];
-                                  //     });
-                                  //   },
-                                  //   icon: Container(
-                                  //     color: _isPressedList[index]
-                                  //         ? Colors.white
-                                  //         : Colors.transparent,
-                                  //     child: Icon(
-                                  //       Icons.favorite,
-                                  //       color: _isPressedList[index]
-                                  //           ? const Color.fromARGB(255, 27, 164, 179)
-                                  //           : Colors.grey,
-                                  //     ),
-                                  //   ),
-                                  // ),
-
-                                                                    IconButton(
-                                    onPressed: () { 
+                                  IconButton(
+                                    onPressed: () {
                                       setState(() {
                                         _isPressedList[index] =
                                             !_isPressedList[index];
                                       });
-
-                                      if (_isPressedList[index]) {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text('Added to Favorites'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  child: const Text('OK'),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          },
-                                        );
-                                      } else {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                  'Removed from Favorites'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  child: const Text('OK'),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                              ],
-                                            ); 
-                                          },
-                                        );
-                                      }
                                     },
                                     icon: Container(
                                       color: _isPressedList[index]
@@ -177,25 +120,16 @@ class _RecentPageDisplayState extends State<RecentPageDisplay> {
                                       child: Icon(
                                         Icons.favorite,
                                         color: _isPressedList[index]
-                                            ? const Color.fromARGB(
-                                                255, 27, 164, 179)
-                                            : const Color.fromARGB(
-                                                255, 139, 135, 135),
+                                            ? const Color.fromARGB(255, 27, 164, 179)
+                                            : Colors.grey,
                                       ),
                                     ),
                                   ),
-                                   
                                   IconButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              AddPlaylistPage(),
-                                        ),
-                                      );
+                                      //need to delete
                                     },
-                                    icon: const Icon(Icons.playlist_add),
+                                    icon: const Icon(Icons.delete),
                                   ),
                                 ],
                               ), // set the background color based on the view mode
@@ -311,7 +245,7 @@ class _RecentPageDisplayState extends State<RecentPageDisplay> {
                                           ),
                                         );
                                       },
-                                      icon: const Icon(Icons.playlist_add),
+                                      icon: const Icon(Icons.delete),
                                     ),
                                   ],
                                 ),

@@ -4,7 +4,6 @@ import 'package:musicuitest/pages/addplayltist.dart';
 import 'package:musicuitest/pages/nowplaying.dart';
 
 class ListViewPage extends StatefulWidget {
-  
   const ListViewPage({super.key});
 
   @override
@@ -12,7 +11,6 @@ class ListViewPage extends StatefulWidget {
 }
 
 class _ListViewPageState extends State<ListViewPage> {
-
   // int _currentIndex = 0;
   bool _isGrid = false; // new variable to keep track of the view mode
   List<bool> _isPressedList =
@@ -37,7 +35,7 @@ class _ListViewPageState extends State<ListViewPage> {
             child: Stack(
               children: [
                 ListView.separated(
-                  itemCount: 4, // set the number of ListTiles to create
+                  itemCount: 3, // set the number of ListTiles to create
                   separatorBuilder: (BuildContext context, int index) {
                     return const SizedBox(
                       height:
@@ -106,12 +104,69 @@ class _ListViewPageState extends State<ListViewPage> {
                               trailing: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
+                                  // IconButton(
+                                  //   onPressed: () {
+                                  //     setState(() {
+                                  //       _isPressedList[index] =
+                                  //           !_isPressedList[index];
+                                  //     });
+                                  //   },
+                                  //   icon: Container(
+                                  //     color: _isPressedList[index]
+                                  //         ? Colors.white
+                                  //         : Colors.transparent,
+                                  //     child: Icon(
+                                  //       Icons.favorite,
+
+                                  //       color: _isPressedList[index]
+                                  //           ? const Color.fromARGB(255, 27, 164, 179)
+                                  //           : const Color.fromARGB(255, 139, 135, 135),
+                                  //     ),
+                                  //   ),
+                                  // ),
                                   IconButton(
-                                    onPressed: () {
+                                    onPressed: () { 
                                       setState(() {
                                         _isPressedList[index] =
                                             !_isPressedList[index];
                                       });
+
+                                      if (_isPressedList[index]) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text('Added to Favorites'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: const Text('OK'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      } else {
+                                        showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              title: const Text(
+                                                  'Removed from Favorites'),
+                                              actions: <Widget>[
+                                                TextButton(
+                                                  child: const Text('OK'),
+                                                  onPressed: () {
+                                                    Navigator.of(context).pop();
+                                                  },
+                                                ),
+                                              ],
+                                            ); 
+                                          },
+                                        );
+                                      }
                                     },
                                     icon: Container(
                                       color: _isPressedList[index]
@@ -120,11 +175,14 @@ class _ListViewPageState extends State<ListViewPage> {
                                       child: Icon(
                                         Icons.favorite,
                                         color: _isPressedList[index]
-                                            ? Colors.red
-                                            : const Color.fromARGB(255, 215, 4, 4),
+                                            ? const Color.fromARGB(
+                                                255, 27, 164, 179)
+                                            : const Color.fromARGB(
+                                                255, 139, 135, 135),
                                       ),
                                     ),
                                   ),
+
                                   IconButton(
                                     onPressed: () {
                                       Navigator.push(
@@ -272,5 +330,3 @@ class _ListViewPageState extends State<ListViewPage> {
   }
 }
 //---------------------------------------------------------------------------------------------
-
-

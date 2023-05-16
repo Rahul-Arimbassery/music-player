@@ -13,9 +13,9 @@ class _NowPlayingState extends State<NowPlaying> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 251, 249, 249),
+      backgroundColor: const Color.fromARGB(255, 253, 250, 250),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 233, 230, 230),
+        backgroundColor: const Color.fromARGB(255, 27, 164, 179),
         title: Container(
           width: 220,
           height: 40,
@@ -30,7 +30,9 @@ class _NowPlayingState extends State<NowPlaying> {
               ),
               Text(
                 "Now Playing",
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(
+                  color: Color.fromARGB(255, 27, 164, 179),
+                ),
               ),
               SizedBox(
                 width: 48,
@@ -39,7 +41,7 @@ class _NowPlayingState extends State<NowPlaying> {
           ),
         ),
       ),
-      body: Column(
+      body:Column(
         children: [
           Row(
             children: [

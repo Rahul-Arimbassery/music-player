@@ -10,7 +10,7 @@ class SplashScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: Future.delayed(
-          const Duration(seconds: 5)), // add a delay of 2 seconds
+          const Duration(seconds: 5)), // add a delay of 5 seconds
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           // show the splash screen while waiting for the delay
@@ -26,23 +26,23 @@ class SplashScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         const SizedBox(height: 60),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children:[
                             Text(
                               "Play Your Perfect Music",
                               style: TextStyle(
                                 fontSize: 20,
-                                color: Color.fromARGB(255, 9, 9, 9),
+                                color: Color.fromARGB(255, 27, 164, 179),
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
                         ),
                         const SizedBox(height: 120),
-                        Row(
+                        const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          children: const [
+                          children:[
                             Text(
                               "MeloPlay",
                               style: TextStyle(

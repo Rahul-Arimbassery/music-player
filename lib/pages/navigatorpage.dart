@@ -202,59 +202,143 @@ class _NavigatorPageState extends State<NavigatorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 251, 251, 252),
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: _pages[_currentIndex],
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: Container(
-              height: 60,
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 210, 212, 210),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(60),
-                  topRight: Radius.circular(60),
+      backgroundColor: const Color.fromARGB(255, 4, 0, 0),
+      body: SafeArea(
+        child: Stack(
+          children: [
+            Positioned(
+              left: 18,
+              right: 210,  // for emulator
+              top: 1,
+              child: Container(
+                height: 55,
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 253, 251, 251),
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(100),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    'MeloPlay',
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Mini Player',
+            ),
+            Positioned(
+              //left: 130,  //for mobile
+              left: 180,  //for emulator
+              right: 0,
+              top: 10,
+              child: Container(
+                height: 55,
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(255, 5, 5, 5),
+                  //color: Color.fromARGB(255, 84, 120, 117),
+                  borderRadius: BorderRadius.only(
+                    //bottomLeft: Radius.circular(30),
+                    //bottomRight: Radius.circular(35),
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  ),
+                ),
+                child: const Center(
+                  child: Text(
+                    '🪘  🪕  🎸  🎶  🎷  🎺',
                     style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.black,
-                    ),
+                        fontSize: 12,
+                        color: Color.fromARGB(255, 6, 6, 6),
+                        fontWeight: FontWeight.bold),
                   ),
-                  const SizedBox(width: 20,),
-                  IconButton(
-                    onPressed: () {
-                      // Implement previous button functionality here
-                    },
-                    icon: const Icon(Icons.skip_previous),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      // Implement play button functionality here
-                    },
-                    icon: const Icon(Icons.play_arrow),
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      // Implement next button functionality here
-                    },
-                    icon: const Icon(Icons.skip_next),
-                  ),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+            Positioned.fill(
+              top: 55,
+              child: _pages[_currentIndex],
+            ),
+            Positioned(
+              left: 18,
+              right: 0,
+              bottom: 0,
+              child: Container(
+                height: 60,
+                decoration: const BoxDecoration(
+                  //color: Color.fromARGB(255, 27, 164, 179),
+                  color: Colors.black,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(90),
+                    topRight: Radius.circular(0),
+                    bottomLeft: Radius.circular(0),
+                    bottomRight: Radius.circular(0),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    const Text(
+                      'Mini Player',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        // Implement previous button functionality here
+                      },
+                      icon: const Icon(
+                        Icons.skip_previous,
+                        color: Colors.amber,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        // Implement play button functionality here
+                      },
+                      icon: const Icon(
+                        Icons.play_arrow,
+                        color: Colors.amber,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        // Implement next button functionality here
+                      },
+                      icon: const Icon(
+                        Icons.skip_next,
+                        color: Colors.amber,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        // Implement next button functionality here
+                      },
+                      icon: const Icon(
+                        Icons.close_outlined,
+                        color: Colors.amber,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _currentIndex,
@@ -263,9 +347,9 @@ class _NavigatorPageState extends State<NavigatorPage> {
             _currentIndex = index;
           });
         },
-        backgroundColor: const Color.fromARGB(255, 248, 247, 245),
-        selectedItemColor: Colors.red,
-        unselectedItemColor: Colors.black,
+        //backgroundColor: Colors.black,
+        selectedItemColor: const Color.fromARGB(255, 27, 164, 179),
+        unselectedItemColor: const Color.fromARGB(255, 5, 5, 5),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),

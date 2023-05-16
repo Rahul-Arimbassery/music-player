@@ -182,10 +182,12 @@ class _PlaylistPageState extends State<PlaylistPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        shadowColor: const Color.fromARGB(255, 27, 164, 179),
+        elevation: 10,
+        backgroundColor: Colors.black,
         title: const Text(
           "Play List",
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: Color.fromARGB(255, 27, 164, 179),),
         ),
       ),
       body: isDetailsPageVisible
@@ -194,7 +196,7 @@ class _PlaylistPageState extends State<PlaylistPage> {
               onClose: closeDetailsPage,
             )
           : Padding(
-              padding: const EdgeInsets.all(45.0),
+              padding: const EdgeInsets.only(left:60.0,top: 30,),
               child: Column(
                 children: [
                   Row(
@@ -202,11 +204,11 @@ class _PlaylistPageState extends State<PlaylistPage> {
                       InkWell(
                         onTap: () => openDetailsPage('Playlist 1'),
                         child: Container(
-                          height: 160,
-                          width: 140,
+                          height: 140,
+                          width: 120,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: const Color.fromARGB(255, 216, 217, 216),
+                            color: const Color.fromARGB(255, 235, 238, 235),
                           ),
                           child: Center(
                             child: Padding(
@@ -226,16 +228,16 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         ),
                       ),
                       const SizedBox(
-                        width: 40,
+                        width: 30,
                       ),
                       InkWell(
                         onTap: () => openDetailsPage('Playlist 2'),
                         child: Container(
-                          height: 160,
-                          width: 140,
+                          height: 140,
+                          width: 120,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: const Color.fromARGB(255, 216, 217, 216),
+                            color: const Color.fromARGB(255, 235, 238, 235),
                           ),
                           child: Center(
                             child: Padding(
@@ -264,11 +266,11 @@ class _PlaylistPageState extends State<PlaylistPage> {
                       InkWell(
                         onTap: () => openDetailsPage('Playlist 3'),
                         child: Container(
-                          height: 160,
-                          width: 140,
+                          height: 140,
+                          width: 120,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: const Color.fromARGB(255, 216, 217, 216),
+                            color: const Color.fromARGB(255, 235, 238, 235),
                           ),
                           child: Center(
                             child: Padding(
@@ -288,16 +290,16 @@ class _PlaylistPageState extends State<PlaylistPage> {
                         ),
                       ),
                       const SizedBox(
-                        width: 40,
+                        width: 30,
                       ),
                       InkWell(
                         onTap:() => openDetailsPage('Playlist 4'),
                         child: Container(
-                          height: 160,
-                          width: 140,
+                          height: 140,
+                          width: 120,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: const Color.fromARGB(255, 216, 217, 216),
+                            color: const Color.fromARGB(255, 235, 238, 235),
                           ),
                           child: Center(
                             child: Padding(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:musicuitest/functions/playlistitems.dart';
 import 'package:musicuitest/functions/recent.dart';
 
 class PlaylistDetailsPage extends StatelessWidget {
@@ -26,7 +27,7 @@ class PlaylistDetailsPage extends StatelessWidget {
           color: Colors.black,
         ),
       ),
-      body: const RecentPageDisplay(),
+      body: const PlayListItems(),
     );
   }
 }
