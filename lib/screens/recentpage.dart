@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:musicuitest/functions/listview.dart';
-import 'package:musicuitest/functions/recent.dart';
+import 'package:musicuitest/widgets/listview.dart';
+import 'package:musicuitest/widgets/recent.dart';
 
 class RecentPage extends StatefulWidget {
   const RecentPage({super.key});

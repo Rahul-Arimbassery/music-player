@@ -152,7 +152,7 @@
 ////////////////////////////////////////////////////////////////////////////
 
 import 'package:flutter/material.dart';
-import 'package:musicuitest/functions/playlistdetailedpage.dart';
+import 'package:musicuitest/widgets/playlistdetailedpage.dart';
 
 class PlaylistPage extends StatefulWidget {
   const PlaylistPage({Key? key}) : super(key: key);

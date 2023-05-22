@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:musicuitest/pages/addplayltist.dart';
+import 'package:musicuitest/screens/addplayltist.dart';
 //import 'package:musicuitest/pages/miniplayer.dart';
-import 'package:musicuitest/pages/nowplaying.dart';
+import 'package:musicuitest/screens/nowplaying.dart';
 
 class ListViewPage extends StatefulWidget {
   const ListViewPage({super.key});
@@ -57,11 +57,11 @@ class _ListViewPageState extends State<ListViewPage> {
                           child: InkWell(
                             onTap: () {
                               //Play using a miniplayer
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const NowPlaying()),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => const NowPlaying()),
+                              // );
                               // Navigator.push(
                               //   context,
                               //   MaterialPageRoute(
@@ -232,11 +232,11 @@ class _ListViewPageState extends State<ListViewPage> {
                   child: InkWell(
                     onTap: () {
                       //Play using a miniplayer
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const NowPlaying()),
-                      );
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //       builder: (context) => const NowPlaying()),
+                      // );
                     },
                     child: Container(
                       decoration: BoxDecoration(

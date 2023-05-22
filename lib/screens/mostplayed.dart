@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:musicuitest/functions/recent.dart';
+import 'package:musicuitest/widgets/recent.dart';
 
 class MostPlayedPage extends StatefulWidget {
   const MostPlayedPage({super.key});

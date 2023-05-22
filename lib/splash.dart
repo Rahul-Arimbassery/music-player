@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 //import 'package:musicuitest/homepage.dart';
-import 'package:musicuitest/pages/navigatorpage.dart';
+import 'package:musicuitest/screens/navigatorpage.dart';
 
 
 class SplashScreen extends StatelessWidget {

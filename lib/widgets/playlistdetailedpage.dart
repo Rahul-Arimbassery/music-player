@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:musicuitest/functions/playlistitems.dart';
-import 'package:musicuitest/functions/recent.dart';
+import 'package:musicuitest/widgets/playlistitems.dart';
+import 'package:musicuitest/widgets/recent.dart';
 
 class PlaylistDetailsPage extends StatelessWidget {
   final String playlistName;
