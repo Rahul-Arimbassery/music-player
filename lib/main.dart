@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 //import 'package:musicuitest/pages/nowplaying.dart';
 import 'package:musicuitest/splash.dart';
 
+
 void main() {
   runApp(const MyApp());
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:musicuitest/globalpage.dart';
 import 'package:musicuitest/screens/addplayltist.dart';
-import 'package:musicuitest/screens/navigatorpage.dart';
 import 'package:musicuitest/screens/nowplaying.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
@@ -130,6 +129,8 @@ class _HomePageState extends State<HomePage> {
     }).toList();
 
     allfilePaths = mp3Songs.map((song) => song.data).toList();
+    songNames = mp3Songs.map((song) => song.title).toList();
+    artistNames = mp3Songs.map((song) => song.artist).toList();
 
     return mp3Songs;
   }
@@ -307,7 +308,7 @@ class _HomePageState extends State<HomePage> {
             child: GridView.count(
               crossAxisCount: 2,
               crossAxisSpacing: 13,
-              mainAxisSpacing: 20,
+              mainAxisSpacing: 22,
               childAspectRatio: 0.80,
               children: List.generate(item.data!.length, (index) {
                 return Material(

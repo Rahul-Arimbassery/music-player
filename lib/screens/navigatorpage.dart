@@ -183,16 +183,7 @@ import 'package:musicuitest/screens/settingpage.dart';
 
 import '../globalpage.dart';
 
-
-
-// void reloadMiniplayer1(_NavigatorPageState state) {
-//   state.reloadMiniplayer();
-// }
-
-// void reloadMiniplayer1() {
-//   final navigatorPageState = _NavigatorPageState();
-//   navigatorPageState.reloadMiniplayer();
-// }
+bool miniPlayerindex = false;
 
 class NavigatorPage extends StatefulWidget {
   const NavigatorPage({Key? key}) : super(key: key);
@@ -213,14 +204,6 @@ class _NavigatorPageState extends State<NavigatorPage> {
 
   int _currentIndex = 0;
   bool isPlaying1 = false;
-
-  //bool showMiniPlayer = false;
-
-  // void reloadMiniplayer() {
-  //   setState(() {
-  //     showMiniPlayer = true;
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -286,88 +269,94 @@ class _NavigatorPageState extends State<NavigatorPage> {
               child: _pages[_currentIndex],
             ),
             Positioned(
+              // when press on miniplayer go back to nowplaying
               left: 18,
               right: 0,
               bottom: 0,
               child: Visibility(
                 visible: showMiniPlayer,
-                child: Container(
-                  height: 60,
-                  decoration: const BoxDecoration(
-                    //color: Color.fromARGB(255, 27, 164, 179),
-                    color: Colors.black,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(90),
-                      topRight: Radius.circular(0),
-                      bottomLeft: Radius.circular(0),
-                      bottomRight: Radius.circular(0),
+                child: GestureDetector(
+                  onTap: () {
+                    miniPlayerindex = true;
+                    Navigator.pop(context,index1);
+                  },
+                  child: Container(
+                    height: 60,
+                    decoration: const BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(90),
+                        topRight: Radius.circular(0),
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(0),
+                      ),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const SizedBox(
-                        width: 30,
-                      ),
-                      const Text(
-                        'Mini Player',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.white,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const SizedBox(
+                          width: 30,
                         ),
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          skipPrevious1();
-                        },
-                        icon: const Icon(
-                          Icons.skip_previous,
-                          color: Colors.amber,
+                        const Text(
+                          'Now Playing',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          playMusic1();
-                          setState(() {
-                            isPlaying1 = !isPlaying1;
-                          });
-                        },
-                        icon: Icon(
-                          isPlaying1 ? Icons.play_arrow : Icons.pause,
-                          color: isPlaying1
-                              ? Colors.amber
-                              : const Color.fromARGB(255, 27, 164, 179),
-                          size: 30,
+                        const SizedBox(
+                          width: 20,
                         ),
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          skipNext1();
-                        },
-                        icon: const Icon(
-                          Icons.skip_next,
-                          color: Colors.amber,
+                        IconButton(
+                          onPressed: () {
+                            skipPrevious1();
+                          },
+                          icon: const Icon(
+                            Icons.skip_previous,
+                            color: Colors.amber,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            showMiniPlayer = false;
-                          });                         
-                          stopMiniplayer();
-                        },
-                        icon: const Icon(
-                          Icons.close_outlined,
-                          color: Colors.amber,
+                        IconButton(
+                          onPressed: () {
+                            playMusic1();
+                            setState(() {
+                              isPlaying1 = !isPlaying1;
+                            });
+                          },
+                          icon: Icon(
+                            isPlaying1 ? Icons.play_arrow : Icons.pause,
+                            color: isPlaying1
+                                ? Colors.amber
+                                : const Color.fromARGB(255, 27, 164, 179),
+                            size: 30,
+                          ),
                         ),
-                      ),
-                    ],
+                        IconButton(
+                          onPressed: () {
+                            skipNext1();
+                          },
+                          icon: const Icon(
+                            Icons.skip_next,
+                            color: Colors.amber,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              showMiniPlayer = false;
+                            });
+                            stopMiniplayer();
+                          },
+                          icon: const Icon(
+                            Icons.close_outlined,
+                            color: Colors.amber,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),

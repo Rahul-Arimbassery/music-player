@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:musicuitest/globalpage.dart';
@@ -5,7 +7,7 @@ import 'package:musicuitest/screens/navigatorpage.dart';
 
 AssetsAudioPlayer _audioPlayer = AssetsAudioPlayer();
 bool isPlaying = false;
-int index1 = 6;
+late int index1;
 
 void playMusic1() {
   if (isPlaying) {
@@ -20,14 +22,13 @@ void playMusic1() {
 void skipNext1() async {
   _audioPlayer.stop();
   await _audioPlayer.open(
-    Audio.file(allfilePaths[index1]),
+    Audio.file(allfilePaths[index1 + 1]),
     autoStart: true,
   );
   index1++;
 }
 
 void skipPrevious1() async {
-  index1--;
   index1--;
   _audioPlayer.stop();
   await _audioPlayer.open(
@@ -37,7 +38,7 @@ void skipPrevious1() async {
 }
 
 void stopMiniplayer() {
-  _audioPlayer.stop();
+  _audioPlayer.pause();
 }
 
 class NowPlaying extends StatefulWidget {
@@ -50,11 +51,14 @@ class NowPlaying extends StatefulWidget {
 }
 
 class _NowPlayingState extends State<NowPlaying> {
-  //bool isPlaying = false;
   int currentTrackIndex = 0;
 
   bool isRepeatEnabled = false;
   Color repeatButtonColor = Colors.black;
+  bool skipPreviousEnabled = false;
+  bool normal = false;
+  late int nameIndex;
+  bool isManualNextOrPrevious = false;
 
   Duration _currentDuration = Duration.zero;
 
@@ -69,13 +73,6 @@ class _NowPlayingState extends State<NowPlaying> {
   void initState() {
     super.initState();
     openMusic(); //music opened here
-    _audioPlayer.playlistAudioFinished.listen((Playing playing) {
-      if (isRepeatEnabled) {
-        openMusic();
-      } else {
-        skipNext();
-      }
-    });
   }
 
   double seekBarValue = 0;
@@ -84,29 +81,6 @@ class _NowPlayingState extends State<NowPlaying> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 253, 250, 250),
-      // appBar: AppBar(
-      //   backgroundColor: const Color.fromARGB(255, 27, 164, 179),
-      //   title: Container(
-      //     width: 220,
-      //     height: 40,
-      //     decoration: BoxDecoration(
-      //       borderRadius: BorderRadius.circular(20),
-      //       color: const Color.fromARGB(255, 251, 249, 249),
-      //     ),
-      //     child: const Row(
-      //       children: [
-      //         SizedBox(width: 50),
-      //         Text(
-      //           "Now Playing",
-      //           style: TextStyle(
-      //             color: Color.fromARGB(255, 27, 164, 179),
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ),
-
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 27, 164, 179),
         automaticallyImplyLeading: false,
@@ -115,36 +89,43 @@ class _NowPlayingState extends State<NowPlaying> {
             Icons.arrow_back,
             color: Colors.amber,
           ),
-          onPressed: () {
+          onPressed: () async {
             setState(() {
               showMiniPlayer = true;
+              index1 = widget.index;
             });
-
-            Navigator.push(
+            final result = await Navigator.push<int>(
               context,
               MaterialPageRoute(
                 builder: (context) => const NavigatorPage(),
               ),
             );
+
+            setState(() {
+              widget.index = result!;
+            });
           },
         ),
-        title: Container(
-          width: 220,
-          height: 40,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(20),
-            color: const Color.fromARGB(255, 251, 249, 249),
-          ),
-          child: const Row(
-            children: [
-              SizedBox(width: 50),
-              Text(
-                "Now Playing",
-                style: TextStyle(
-                  color: Color.fromARGB(255, 27, 164, 179),
+        title: Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Container(
+            width: 200,
+            height: 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              color: const Color.fromARGB(255, 239, 234, 234),
+            ),
+            child: const Row(
+              children: [
+                SizedBox(width: 45),
+                Text(
+                  "Now Playing",
+                  style: TextStyle(
+                    color: Color.fromARGB(255, 27, 164, 179),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -167,10 +148,30 @@ class _NowPlayingState extends State<NowPlaying> {
                         "asset/images/music-band.png",
                         width: 250,
                       ),
-                      const Text(
-                        "Song Name",
-                        style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.bold),
+                      const SizedBox(height: 20),
+                      // const Text(
+                      //   "Song Name - Artist",
+                      //   style: TextStyle(
+                      //     fontSize: 18,
+                      //     fontWeight: FontWeight.bold,
+                      //   ),
+                      // ),
+                      Text(
+                        //songNames[widget.index],
+                        songNames[widget.index],
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Text(
+                        //artistNames[widget.index]!,
+                        artistNames[widget.index]!,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -258,7 +259,10 @@ class _NowPlayingState extends State<NowPlaying> {
                         color: const Color.fromARGB(255, 239, 234, 234),
                       ),
                       child: IconButton(
-                        onPressed: skipPrevious,
+                        onPressed: () {
+                          skipPreviousEnabled = true;
+                          skipPrevious();
+                        },
                         icon: const Icon(
                           Icons.skip_previous,
                           color: Colors.black,
@@ -279,9 +283,9 @@ class _NowPlayingState extends State<NowPlaying> {
                       child: IconButton(
                         onPressed: seekBackward,
                         icon: const Icon(
-                          Icons.fast_rewind,
+                          Icons.replay_10,
                           color: Colors.black,
-                          size: 20,
+                          size: 28,
                         ),
                       ),
                     ),
@@ -323,9 +327,9 @@ class _NowPlayingState extends State<NowPlaying> {
                       child: IconButton(
                         onPressed: seekForward,
                         icon: const Icon(
-                          Icons.fast_forward,
+                          Icons.forward_10,
                           color: Colors.black,
-                          size: 20,
+                          size: 28,
                         ),
                       ),
                     ),
@@ -479,6 +483,15 @@ class _NowPlayingState extends State<NowPlaying> {
     setState(() {
       isPlaying = true; // Set isPlaying to true when opening the music
     });
+
+    _audioPlayer.playlistAudioFinished.listen((Playing playing) {
+      if (!isManualNextOrPrevious) {
+        nextMusic();
+      } else {
+        isManualNextOrPrevious =
+            false; // Reset the flag after manual next/previous
+      }
+    });
   }
 
   void playMusic() {
@@ -497,6 +510,7 @@ class _NowPlayingState extends State<NowPlaying> {
     widget.index++;
     setState(() {
       isPlaying = false;
+      isManualNextOrPrevious = true; // Set the flag for manual next/previous
     });
     openMusic();
   }
@@ -506,8 +520,23 @@ class _NowPlayingState extends State<NowPlaying> {
     widget.index--;
     setState(() {
       isPlaying = false;
+      isManualNextOrPrevious = true; // Set the flag for manual next/previous
     });
     openMusic();
+  }
+
+  void nextMusic() async {
+    _audioPlayer.stop();
+    widget.index++;
+    setState(() {
+      isPlaying = true;
+    });
+    String filePath = allfilePaths[widget.index];
+    await _audioPlayer.open(
+      Audio.file(filePath),
+      autoStart: true,
+    );
+    widget.index--;
   }
 
   void seekForward() {
