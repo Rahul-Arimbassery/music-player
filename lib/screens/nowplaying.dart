@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:musicuitest/globalpage.dart';
@@ -26,10 +24,12 @@ void skipNext1() async {
     autoStart: true,
   );
   index1++;
+  songNameindex = index1;
 }
 
 void skipPrevious1() async {
   index1--;
+  songNameindex = index1;
   _audioPlayer.stop();
   await _audioPlayer.open(
     Audio.file(allfilePaths[index1]),
@@ -93,6 +93,7 @@ class _NowPlayingState extends State<NowPlaying> {
             setState(() {
               showMiniPlayer = true;
               index1 = widget.index;
+              songNameindex = index1;
             });
             final result = await Navigator.push<int>(
               context,
@@ -253,7 +254,7 @@ class _NowPlayingState extends State<NowPlaying> {
                   children: [
                     Container(
                       width: 50,
-                      height: 40,
+                      height: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(40),
                         color: const Color.fromARGB(255, 239, 234, 234),
@@ -285,7 +286,7 @@ class _NowPlayingState extends State<NowPlaying> {
                         icon: const Icon(
                           Icons.replay_10,
                           color: Colors.black,
-                          size: 28,
+                          size: 21,
                         ),
                       ),
                     ),
@@ -329,7 +330,7 @@ class _NowPlayingState extends State<NowPlaying> {
                         icon: const Icon(
                           Icons.forward_10,
                           color: Colors.black,
-                          size: 28,
+                          size: 21,
                         ),
                       ),
                     ),
@@ -338,7 +339,7 @@ class _NowPlayingState extends State<NowPlaying> {
                     ),
                     Container(
                       width: 50,
-                      height: 40,
+                      height: 50,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(40),
                         color: const Color.fromARGB(255, 239, 234, 234),

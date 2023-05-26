@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:hive/hive.dart';
 import 'package:musicuitest/globalpage.dart';
 import 'package:musicuitest/screens/addplayltist.dart';
+import 'package:musicuitest/screens/favoritepage.dart';
 import 'package:musicuitest/screens/nowplaying.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:assets_audio_player/assets_audio_player.dart';
 
-AssetsAudioPlayer _audioPlayer = AssetsAudioPlayer();
+import 'models/allsongs.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+
+
+final OnAudioQuery _audioQuery = OnAudioQuery();
+SharedPreferences? _prefs;
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -17,27 +25,48 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final OnAudioQuery _audioQuery = OnAudioQuery();
+  //final OnAudioQuery _audioQuery = OnAudioQuery();
 
   late List<bool> _isPressedList; // declare the _isPressedList variable
   bool _hasPermission = false;
   bool _isGrid = false; // new variable to keep track of the view mode
+  Future<List<SongModel>>? _futureResult;
+  int count = 0;
 
   @override
   void initState() {
     super.initState();
+    initializePreferences();
+
     LogConfig logConfig = LogConfig(logType: LogType.DEBUG);
     _audioQuery.setLogConfig(logConfig);
     checkAndRequestPermissions();
+    _futureResult = fetchMP3Songs();
+  }
+
+  Future<void> initializePreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+    // Load the saved button states from shared preferences
+    loadButtonStates();
+  }
+
+  void loadButtonStates() {
+    int itemCount = 500;
+    setState(() {
+      _isPressedList = List.generate(
+        itemCount,
+        (index) => _prefs!.getBool('buttonState$index') ?? false,
+      );
+    });
   }
 
   checkAndRequestPermissions({bool retry = false}) async {
     _hasPermission = await _audioQuery.checkAndRequest(
       retryRequest: retry,
     );
-
     _hasPermission ? setState(() {}) : null;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +115,7 @@ class _HomePageState extends State<HomePage> {
           child: !_hasPermission
               ? noAccessToLibraryWidget()
               : FutureBuilder<List<SongModel>>(
-                  future: fetchMP3Songs(),
+                  future: _futureResult,
                   builder: (context, item) {
                     if (item.hasError) {
                       return Text(item.error.toString());
@@ -100,9 +129,11 @@ class _HomePageState extends State<HomePage> {
                       return const Text("No MP3 songs found!");
                     }
 
-                    // Generate and initialize _isPressedList based on item.data length
-                    _isPressedList =
-                        List<bool>.filled(item.data!.length, false);
+                    //Generate and initialize _isPressedList based on item.data length
+                    // if (count == 0) {
+                    //   _isPressedList =
+                    //       List<bool>.filled(item.data!.length, false);
+                    // }
 
                     return _isGrid
                         ? _buildGridView(item)
@@ -122,7 +153,7 @@ class _HomePageState extends State<HomePage> {
       ignoreCase: true,
     );
 
-    // Filter the songs to keep only MP3 files.
+    //Filter the songs to keep only MP3 files.
     List<SongModel> mp3Songs = allSongs.where((song) {
       String? filePath = song.data;
       return filePath.toLowerCase().endsWith('.mp3');
@@ -131,6 +162,7 @@ class _HomePageState extends State<HomePage> {
     allfilePaths = mp3Songs.map((song) => song.data).toList();
     songNames = mp3Songs.map((song) => song.title).toList();
     artistNames = mp3Songs.map((song) => song.artist).toList();
+    ids = mp3Songs.map((song) => song.id).toList();
 
     return mp3Songs;
   }
@@ -170,7 +202,7 @@ class _HomePageState extends State<HomePage> {
                   separatorBuilder: (BuildContext context, int index) {
                     return const SizedBox(
                       height:
-                          25.0, // set the desired height of the space between each ListTile
+                          4, // set the desired height of the space between each ListTile
                     );
                   },
                   itemBuilder: (BuildContext context, int index) {
@@ -179,15 +211,15 @@ class _HomePageState extends State<HomePage> {
                           25.0), // set the desired border radius value
                       child: Card(
                         color: const Color.fromARGB(255, 252, 251, 251),
-                        elevation: 10.0,
+                        elevation: 3.0,
                         shadowColor: const Color.fromARGB(255, 252, 251, 251),
                         child: SizedBox(
-                          height: 80.0, // set the desired height of the Card
+                          height: 70.0, // set the desired height of the Card
                           width: double
                               .infinity, // set the width to match the parent ListView
                           child: InkWell(
-                            onTap: () {  
-                              _audioPlayer.stop();
+                            onTap: () {
+                              //_audioPlayer.stop();
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -195,7 +227,7 @@ class _HomePageState extends State<HomePage> {
                                     index: index,
                                   ),
                                 ),
-                              );                             
+                              );
                             },
                             child: ListTile(
                               leading: QueryArtworkWidget(
@@ -203,9 +235,14 @@ class _HomePageState extends State<HomePage> {
                                 id: item.data![index].id,
                                 type: ArtworkType.AUDIO,
                               ),
-                              title: Text(item.data![index].title),
-                              subtitle:
-                                  Text(item.data![index].artist ?? "No Artist"),
+                              title: Text(
+                                item.data![index].title,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              subtitle: Text(
+                                item.data![index].artist ?? "No Artist",
+                                overflow: TextOverflow.ellipsis,
+                              ),
                               tileColor:
                                   const Color.fromARGB(255, 250, 250, 251),
                               trailing: Row(
@@ -216,46 +253,48 @@ class _HomePageState extends State<HomePage> {
                                       setState(() {
                                         _isPressedList[index] =
                                             !_isPressedList[index];
-                                      });
 
+                                        //count = 1;
+                                      });
                                       if (_isPressedList[index]) {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                  'Added to Favorites'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  child: const Text('OK'),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          },
+                                        //addtoFavoritedb(index);
+                                        addtoFavoritedb(index);
+                                        Fluttertoast.showToast(
+                                          msg: 'Song Added to Favorites',
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 27, 164, 179),
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
                                         );
                                       } else {
-                                        showDialog(
-                                          context: context,
-                                          builder: (BuildContext context) {
-                                            return AlertDialog(
-                                              title: const Text(
-                                                  'Removed from Favorites'),
-                                              actions: <Widget>[
-                                                TextButton(
-                                                  child: const Text('OK'),
-                                                  onPressed: () {
-                                                    Navigator.of(context).pop();
-                                                  },
-                                                ),
-                                              ],
-                                            );
-                                          },
+                                        deleteSongFromFavorite(index);
+                                        Fluttertoast.showToast(
+                                          msg: 'Song Removed from Favorites',
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 27, 164, 179),
+                                          toastLength: Toast.LENGTH_SHORT,
+                                          gravity: ToastGravity.BOTTOM,
                                         );
                                       }
+                                      // Save the button state to shared preferences
+                                      _prefs?.setBool('buttonState$index',
+                                          _isPressedList[index]);
                                     },
+                                    // icon: Container(
+                                    //   color: _isPressedList[index]
+                                    //       ? Colors.white
+                                    //       : Colors.transparent,
+                                    //   child: Icon(
+                                    //     Icons.favorite,
+                                    //     color: _isPressedList[index]
+                                    //         ? const Color.fromARGB(
+                                    //             255, 27, 164, 179)
+                                    //         : const Color.fromARGB(
+                                    //             255, 139, 135, 135),
+                                    //   ),
+                                    // ),
+
+                                    // Assuming you have another boolean status named '_isStatus2True'
                                     icon: Container(
                                       color: _isPressedList[index]
                                           ? Colors.white
@@ -318,7 +357,7 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(15.0),
                   child: InkWell(
                     onTap: () {
-                      _audioPlayer.stop();
+                      //_audioPlayer.stop();
                       //Play using a miniplayer
                       Navigator.push(
                         context,
@@ -409,4 +448,14 @@ class _HomePageState extends State<HomePage> {
       ],
     );
   }
+}
+
+addtoFavoritedb(int index) async {
+  var favorite = await Hive.openBox<AllSongs>('allSongs');
+  favorite.add(AllSongs(songID: index));
+}
+
+void removeFromFavoritedb(int index) async {
+  var favorite = await Hive.openBox<AllSongs>('allSongs');
+  favorite.deleteAt(index);
 }

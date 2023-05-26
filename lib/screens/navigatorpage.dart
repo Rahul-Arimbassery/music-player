@@ -1,177 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:musicuitest/homepage.dart';
-// import 'package:musicuitest/pages/favoritepage.dart';
-// import 'package:musicuitest/pages/mostplayed.dart';
-// import 'package:musicuitest/pages/playlistpage.dart';
-// import 'package:musicuitest/pages/recentpage.dart';
-// import 'package:musicuitest/pages/settingpage.dart';
-
-// class NavigatorPage extends StatefulWidget {
-//   const NavigatorPage({super.key});
-
-//   @override
-//   State<NavigatorPage> createState() => _NavigatorPageState();
-// }
-
-// class _NavigatorPageState extends State<NavigatorPage> {
-
-//   final List<Widget> _pages = [
-//   const HomePage(), // Add your home page widget here
-//   const FavoritePage(), // Add your favorite page widget here
-//   const RecentPage(), // Add your recent page widget here
-//   const PlaylistPage(), // Add your playlist page widget here
-//   const MostPlayedPage(), // Add your most played page widget here
-//   const SettingsPage(), // Add your settings page widget here
-// ];
-
-//   //bool _isGrid = false;
-//   int _currentIndex = 0;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: const Color.fromARGB(255, 251, 251, 252),
-//       body: SafeArea(
-//         child: _pages[_currentIndex],
-//       ),
-//             bottomNavigationBar: BottomNavigationBar(
-//         currentIndex: _currentIndex,
-//         onTap: (int index) {
-//           setState(() {
-//             _currentIndex = index;
-//           });
-//         },
-//         backgroundColor: const Color.fromARGB(255, 248, 247, 245),
-//         selectedItemColor: Colors.red,
-//         unselectedItemColor: Colors.black,
-//         items: const [
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.home),
-//             label: 'Home',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.favorite),
-//             label: 'Favorite',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.music_note),
-//             label: 'Recent',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.playlist_add_check),
-//             label: 'Playlist',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.play_circle_rounded),
-//             label: 'Most Played',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.settings),
-//             label: 'Settings',
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-//-----------------------------------------------------------------------
-
-// import 'package:flutter/material.dart';
-// import 'package:musicuitest/homepage.dart';
-// import 'package:musicuitest/pages/favoritepage.dart';
-// import 'package:musicuitest/pages/mostplayed.dart';
-// import 'package:musicuitest/pages/playlistpage.dart';
-// import 'package:musicuitest/pages/recentpage.dart';
-// import 'package:musicuitest/pages/settingpage.dart';
-
-// class NavigatorPage extends StatefulWidget {
-//   const NavigatorPage({Key? key}) : super(key: key);
-
-//   @override
-//   State<NavigatorPage> createState() => _NavigatorPageState();
-// }
-
-// class _NavigatorPageState extends State<NavigatorPage> {
-//   final List<Widget> _pages = [
-//     const HomePage(), // Add your home page widget here
-//     const FavoritePage(), // Add your favorite page widget here
-//     const RecentPage(), // Add your recent page widget here
-//     const PlaylistPage(), // Add your playlist page widget here
-//     const MostPlayedPage(), // Add your most played page widget here
-//     const SettingsPage(), // Add your settings page widget here
-//   ];
-
-//   int _currentIndex = 0;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: const Color.fromARGB(255, 251, 251, 252),
-//       body: SafeArea(
-//         child: Column(
-//           children: [
-//             Container(
-//               height: 100,
-//               color:
-//                   Colors.blue, // Customize the container properties as needed
-//               child: Center(
-//                 child: Text(
-//                   'Fixed Container',
-//                   style: TextStyle(
-//                     fontSize: 24,
-//                     color: Colors.white,
-//                   ),
-//                 ),
-//               ),
-//             ),
-//             Expanded(
-//               child: _pages[_currentIndex],
-//             ),
-//           ],
-//         ),
-//       ),
-//       bottomNavigationBar: BottomNavigationBar(
-//         currentIndex: _currentIndex,
-//         onTap: (int index) {
-//           setState(() {
-//             _currentIndex = index;
-//           });
-//         },
-//         backgroundColor: const Color.fromARGB(255, 248, 247, 245),
-//         selectedItemColor: Colors.red,
-//         unselectedItemColor: Colors.black,
-//         items: const [
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.home),
-//             label: 'Home',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.favorite),
-//             label: 'Favorite',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.music_note),
-//             label: 'Recent',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.playlist_add_check),
-//             label: 'Playlist',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.play_circle_rounded),
-//             label: 'Most Played',
-//           ),
-//           BottomNavigationBarItem(
-//             icon: Icon(Icons.settings),
-//             label: 'Settings',
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-//////////////////////////////////////////////////////////////////
 import 'package:flutter/material.dart';
 import 'package:musicuitest/homepage.dart';
 import 'package:musicuitest/screens/favoritepage.dart';
@@ -184,6 +10,7 @@ import 'package:musicuitest/screens/settingpage.dart';
 import '../globalpage.dart';
 
 bool miniPlayerindex = false;
+int songNameindex = 0;
 
 class NavigatorPage extends StatefulWidget {
   const NavigatorPage({Key? key}) : super(key: key);
@@ -278,7 +105,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
                 child: GestureDetector(
                   onTap: () {
                     miniPlayerindex = true;
-                    Navigator.pop(context,index1);
+                    Navigator.pop(context, index1);
                   },
                   child: Container(
                     height: 60,
@@ -291,71 +118,92 @@ class _NavigatorPageState extends State<NavigatorPage> {
                         bottomRight: Radius.circular(0),
                       ),
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const SizedBox(
-                          width: 30,
-                        ),
-                        const Text(
-                          'Now Playing',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            width: 20,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 20,
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            skipPrevious1();
-                          },
-                          icon: const Icon(
-                            Icons.skip_previous,
-                            color: Colors.amber,
+                          !showMiniPlayer
+                              ? const Text(
+                                  'Now Playing',
+                                  style: TextStyle(
+                                    fontSize: 8,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Expanded(
+                                  child: Text(
+                                    songNames[songNameindex],
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white),
+                                  ),
+                                ),
+                          const SizedBox(
+                            width: 10,
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            playMusic1();
-                            setState(() {
-                              isPlaying1 = !isPlaying1;
-                            });
-                          },
-                          icon: Icon(
-                            isPlaying1 ? Icons.play_arrow : Icons.pause,
-                            color: isPlaying1
-                                ? Colors.amber
-                                : const Color.fromARGB(255, 27, 164, 179),
-                            size: 30,
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                songNameindex = songNameindex + 1;
+                                skipPrevious1();
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.skip_previous,
+                              color: Colors.amber,
+                            ),
                           ),
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            skipNext1();
-                          },
-                          icon: const Icon(
-                            Icons.skip_next,
-                            color: Colors.amber,
+                          IconButton(
+                            onPressed: () {
+                              playMusic1();
+                              setState(() {
+                                isPlaying1 = !isPlaying1;
+                              });
+                            },
+                            icon: Icon(
+                              isPlaying1 ? Icons.play_arrow : Icons.pause,
+                              color: isPlaying1
+                                  ? Colors.amber
+                                  : const Color.fromARGB(255, 27, 164, 179),
+                              size: 30,
+                            ),
                           ),
-                        ),
-                        const SizedBox(
-                          width: 10,
-                        ),
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              showMiniPlayer = false;
-                            });
-                            stopMiniplayer();
-                          },
-                          icon: const Icon(
-                            Icons.close_outlined,
-                            color: Colors.amber,
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                songNameindex = songNameindex + 1;
+                                skipNext1();
+                              });
+                            },
+                            icon: const Icon(
+                              Icons.skip_next,
+                              color: Colors.amber,
+                            ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                showMiniPlayer = false;
+                              });
+                              stopMiniplayer();
+                            },
+                            icon: const Icon(
+                              Icons.stop_circle_outlined,
+                              color: Colors.amber,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
