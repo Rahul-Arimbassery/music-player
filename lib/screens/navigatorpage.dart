@@ -11,6 +11,7 @@ import '../globalpage.dart';
 
 bool miniPlayerindex = false;
 int songNameindex = 0;
+bool pagestatus = false;
 
 class NavigatorPage extends StatefulWidget {
   const NavigatorPage({Key? key}) : super(key: key);
@@ -217,6 +218,7 @@ class _NavigatorPageState extends State<NavigatorPage> {
         onTap: (int index) {
           setState(() {
             _currentIndex = index;
+            pagestatus = true;
           });
         },
         //backgroundColor: Colors.black,

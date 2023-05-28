@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:musicuitest/globalpage.dart';
 import 'package:musicuitest/screens/navigatorpage.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 
 AssetsAudioPlayer _audioPlayer = AssetsAudioPlayer();
 bool isPlaying = false;
 late int index1;
+final OnAudioQuery _audioQuery = OnAudioQuery();
 
 void playMusic1() {
   if (isPlaying) {
@@ -82,7 +84,7 @@ class _NowPlayingState extends State<NowPlaying> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 253, 250, 250),
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 27, 164, 179),
+        backgroundColor: const Color.fromARGB(255, 47, 47, 47),
         automaticallyImplyLeading: false,
         leading: IconButton(
           icon: const Icon(
@@ -101,7 +103,6 @@ class _NowPlayingState extends State<NowPlaying> {
                 builder: (context) => const NavigatorPage(),
               ),
             );
-
             setState(() {
               widget.index = result!;
             });
@@ -114,7 +115,14 @@ class _NowPlayingState extends State<NowPlaying> {
             height: 40,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20),
-              color: const Color.fromARGB(255, 239, 234, 234),
+              gradient: const RadialGradient(
+                colors: [
+                  Color.fromARGB(255, 47, 47, 47),
+                  Color.fromARGB(255, 47, 47, 47),
+                ],
+                center: Alignment.topLeft,
+                radius: 5,
+              ),
             ),
             child: const Row(
               children: [
@@ -130,342 +138,380 @@ class _NowPlayingState extends State<NowPlaying> {
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 30.0, left: 22, right: 20),
-                child: Container(
-                  width: 310,
-                  height: 280,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(30),
-                    color: const Color.fromARGB(255, 239, 234, 234),
-                  ),
-                  child: Column(
-                    children: [
-                      Image.asset(
-                        "asset/images/music-band.png",
-                        width: 250,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: RadialGradient(
+            colors: [
+              Color.fromARGB(255, 254, 254, 253),
+              Color.fromARGB(255, 61, 61, 58),
+            ],
+            center: Alignment.topLeft,
+            radius: 3.5,
+          ),
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Padding(
+                  padding:
+                      const EdgeInsets.only(top: 30.0, left: 25, right: 25),
+                  child: Container(
+                    width: 310,
+                    height: 330,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(45),
+                      gradient: const RadialGradient(
+                        colors: [
+                          Color.fromARGB(255, 61, 61, 58),
+                          Color.fromARGB(255, 254, 254, 253),
+                        ],
+                        center: Alignment.bottomRight,
+                        radius: 1.4,
                       ),
-                      const SizedBox(height: 20),
-                      // const Text(
-                      //   "Song Name - Artist",
-                      //   style: TextStyle(
-                      //     fontSize: 18,
-                      //     fontWeight: FontWeight.bold,
-                      //   ),
-                      // ),
-                      Text(
-                        //songNames[widget.index],
-                        songNames[widget.index],
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                    ),
+                    child: Column(
+                      children: [
+                        // Image.asset(
+                        //   "asset/images/music-band.png",
+                        //   width: 250,
+                        // ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 35.0),
+                          child: SizedBox(
+                            width: 240,
+                            height: 220,
+                            child: QueryArtworkWidget(
+                              controller: _audioQuery,
+                              //id: ids[currentindex],
+                              id: ids[widget.index],
+                              type: ArtworkType.AUDIO,
+                              artworkBorder: BorderRadius.circular(
+                                  30), // Set the desired height // Set the desired aspect ratio
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        // const Text(
+                        //   "Song Name - Artist",
+                        //   style: TextStyle(
+                        //     fontSize: 18,
+                        //     fontWeight: FontWeight.bold,
+                        //   ),
+                        // ),
+                        Text(
+                          //songNames[currentindex],
+                          songNames[widget.index],
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text(
+                          //artistNames[currentindex]!,
+                          artistNames[widget.index]!,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 22, right: 20),
+                  child: SizedBox(
+                    width: 310,
+                    height: 30,
+                    child: StreamBuilder<RealtimePlayingInfos>(
+                      stream: _audioPlayer.realtimePlayingInfos,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<RealtimePlayingInfos> snapshot) {
+                        if (snapshot.hasData) {
+                          final RealtimePlayingInfos infos = snapshot.data!;
+                          final Duration? totalDuration =
+                              infos.current?.audio.duration;
+                          final Duration currentPosition =
+                              infos.currentPosition;
+
+                          if (totalDuration != null) {
+                            final String totalDurationString =
+                                _formatDuration(totalDuration);
+                            final String currentPositionString =
+                                _formatDuration(currentPosition);
+
+                            return GestureDetector(
+                              onHorizontalDragUpdate:
+                                  (DragUpdateDetails details) {
+                                final double dragPosition =
+                                    details.localPosition.dx;
+                                final double width = context.size!.width;
+                                final double seekPercentage =
+                                    dragPosition / width;
+                                final Duration seekDuration =
+                                    totalDuration * seekPercentage;
+                                _audioPlayer.seek(seekDuration);
+                              },
+                              child: LinearProgressIndicator(
+                                value: currentPosition.inMilliseconds /
+                                    totalDuration.inMilliseconds,
+                                minHeight: 5.0,
+                                backgroundColor:
+                                    const Color.fromARGB(255, 239, 234, 234),
+                                valueColor: const AlwaysStoppedAnimation<Color>(
+                                  Color.fromARGB(255, 27, 164, 179),
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                        return const LinearProgressIndicator(
+                          value: 0.0,
+                          minHeight: 25.0,
+                          backgroundColor: Colors.grey,
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.blue),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 22, right: 20, top: 20),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: const Color.fromARGB(255, 239, 234, 234),
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            skipPreviousEnabled = true;
+                            skipPrevious();
+                          },
+                          icon: const Icon(
+                            Icons.skip_previous,
+                            color: Colors.black,
+                            size: 30,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      Text(
-                        //artistNames[widget.index]!,
-                        artistNames[widget.index]!,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: const Color.fromARGB(255, 239, 234, 234),
+                        ),
+                        child: IconButton(
+                          onPressed: seekBackward,
+                          icon: const Icon(
+                            Icons.replay_10,
+                            color: Colors.black,
+                            size: 21,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        width: 80,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: const Color.fromARGB(255, 239, 234, 234),
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              playMusic();
+                            });
+                          },
+                          icon: Icon(
+                            isPlaying ? Icons.pause : Icons.play_arrow,
+                            color: isPlaying
+                                ? const Color.fromARGB(255, 27, 164, 179)
+                                : Colors.black,
+                            size: 30,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: const Color.fromARGB(255, 239, 234, 234),
+                        ),
+                        child: IconButton(
+                          onPressed: seekForward,
+                          icon: const Icon(
+                            Icons.forward_10,
+                            color: Colors.black,
+                            size: 21,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: const Color.fromARGB(255, 239, 234, 234),
+                        ),
+                        child: IconButton(
+                          onPressed: skipNext,
+                          icon: const Icon(
+                            Icons.skip_next,
+                            color: Colors.black,
+                            size: 30,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 25,
-          ),
-          Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 22, right: 20),
-                child: SizedBox(
-                  width: 310,
-                  height: 30,
-                  child: StreamBuilder<RealtimePlayingInfos>(
-                    stream: _audioPlayer.realtimePlayingInfos,
-                    builder: (BuildContext context,
-                        AsyncSnapshot<RealtimePlayingInfos> snapshot) {
-                      if (snapshot.hasData) {
-                        final RealtimePlayingInfos infos = snapshot.data!;
-                        final Duration? totalDuration =
-                            infos.current?.audio.duration;
-                        final Duration currentPosition = infos.currentPosition;
-
-                        if (totalDuration != null) {
-                          final String totalDurationString =
-                              _formatDuration(totalDuration);
-                          final String currentPositionString =
-                              _formatDuration(currentPosition);
-
-                          return GestureDetector(
-                            onHorizontalDragUpdate:
-                                (DragUpdateDetails details) {
-                              final double dragPosition =
-                                  details.localPosition.dx;
-                              final double width = context.size!.width;
-                              final double seekPercentage =
-                                  dragPosition / width;
-                              final Duration seekDuration =
-                                  totalDuration * seekPercentage;
-                              _audioPlayer.seek(seekDuration);
-                            },
-                            child: LinearProgressIndicator(
-                              value: currentPosition.inMilliseconds /
-                                  totalDuration.inMilliseconds,
-                              minHeight: 5.0,
-                              backgroundColor:
-                                  const Color.fromARGB(255, 239, 234, 234),
-                              valueColor: const AlwaysStoppedAnimation<Color>(
-                                Color.fromARGB(255, 27, 164, 179),
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                      return const LinearProgressIndicator(
-                        value: 0.0,
-                        minHeight: 25.0,
-                        backgroundColor: Colors.grey,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.blue),
-                      );
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 20,
-          ),
-          Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 22, right: 20, top: 20),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: const Color.fromARGB(255, 239, 234, 234),
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          skipPreviousEnabled = true;
-                          skipPrevious();
-                        },
-                        icon: const Icon(
-                          Icons.skip_previous,
-                          color: Colors.black,
-                          size: 30,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: const Color.fromARGB(255, 239, 234, 234),
-                      ),
-                      child: IconButton(
-                        onPressed: seekBackward,
-                        icon: const Icon(
-                          Icons.replay_10,
-                          color: Colors.black,
-                          size: 21,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      width: 80,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: const Color.fromARGB(255, 239, 234, 234),
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          setState(() {
-                            playMusic();
-                          });
-                        },
-                        icon: Icon(
-                          isPlaying ? Icons.pause : Icons.play_arrow,
-                          color: isPlaying
-                              ? const Color.fromARGB(255, 27, 164, 179)
-                              : Colors.black,
-                          size: 30,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: const Color.fromARGB(255, 239, 234, 234),
-                      ),
-                      child: IconButton(
-                        onPressed: seekForward,
-                        icon: const Icon(
-                          Icons.forward_10,
-                          color: Colors.black,
-                          size: 21,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: const Color.fromARGB(255, 239, 234, 234),
-                      ),
-                      child: IconButton(
-                        onPressed: skipNext,
-                        icon: const Icon(
-                          Icons.skip_next,
-                          color: Colors.black,
-                          size: 30,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 05,
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 40, right: 20, top: 20),
-            child: Row(
-              children: [
-                Column(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: const Color.fromARGB(255, 239, 234, 234),
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.shuffle,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 35,
-                ),
-                Column(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: const Color.fromARGB(255, 239, 234, 234),
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 35,
-                ),
-                Column(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: const Color.fromARGB(255, 239, 234, 234),
-                      ),
-                      child: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.playlist_add,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 35,
-                ),
-                Column(
-                  children: [
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        //color: const Color.fromARGB(255, 239, 234, 234),
-                        color: isRepeatEnabled
-                            ? const Color.fromARGB(255, 27, 164, 179)
-                            : const Color.fromARGB(255, 239, 234, 234),
-                      ),
-                      child: IconButton(
-                        onPressed: toggleRepeat,
-                        icon: const Icon(
-                          Icons.repeat,
-                          color: Colors.black,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ],
             ),
-          ),
-        ],
+            const SizedBox(
+              height: 05,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 40, right: 20, top: 20),
+              child: Row(
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: const Color.fromARGB(255, 239, 234, 234),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.shuffle,
+                            color: Colors.black,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 35,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: const Color.fromARGB(255, 239, 234, 234),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.favorite,
+                            color: Colors.black,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 35,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          color: const Color.fromARGB(255, 239, 234, 234),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(
+                            Icons.playlist_add,
+                            color: Colors.black,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(
+                    width: 35,
+                  ),
+                  Column(
+                    children: [
+                      Container(
+                        width: 40,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(40),
+                          //color: const Color.fromARGB(255, 239, 234, 234),
+                          color: isRepeatEnabled
+                              ? const Color.fromARGB(255, 27, 164, 179)
+                              : const Color.fromARGB(255, 239, 234, 234),
+                        ),
+                        child: IconButton(
+                          onPressed: toggleRepeat,
+                          icon: const Icon(
+                            Icons.repeat,
+                            color: Colors.black,
+                            size: 20,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
   late int currentindex;
+  late int manually;
 
   void toggleRepeat() {
     setState(() {
