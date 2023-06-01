@@ -10,7 +10,7 @@ import '../models/allsongs.dart';
 
 final OnAudioQuery _audioQuery = OnAudioQuery();
 
-List<bool> isFavoriteChanged = List.generate(500, (index) => false);
+List<bool> isFavoriteChanged = List.generate(100, (index) => false);
 
 class FavoritePage extends StatefulWidget {
   const FavoritePage({Key? key});
@@ -48,82 +48,100 @@ class _FavoritePageState extends State<FavoritePage> {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(17.0),
-        child: ListView.separated(
-          itemCount: indexes.length,
-          separatorBuilder: (BuildContext context, int index) {
-            return const SizedBox(
-              height:
-                  4, // set the desired height of the space between each ListTile
-            );
-          },
-          itemBuilder: (context, index) {
-            int currentindex = indexes[index];
-            return ClipRRect(
-              borderRadius: BorderRadius.circular(
-                  25.0), // set the desired border radius value
-              child: Card(
-                color: const Color.fromARGB(255, 252, 251, 251),
-                elevation: 3.0,
-                shadowColor: const Color.fromARGB(255, 252, 251, 251),
-                child: SizedBox(
-                  height: 70.0, // set the desired height of the Card
-                  width: double
-                      .infinity, // set the width to match the parent ListView
-                  child: InkWell(
-                    onTap: () {
-                      //_audioPlayer.stop();
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => NowPlaying(
-                            index: currentindex,
+      body: Container(
+        decoration: const BoxDecoration(
+            gradient: RadialGradient(
+          colors: [
+            Color.fromARGB(255, 61, 61, 58),
+            Color.fromARGB(255, 254, 254, 253),
+          ],
+          center: Alignment.topLeft,
+          radius: 1.2,
+        )),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: ListView.separated(
+            itemCount: indexes.length,
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox(
+                height:
+                    4, // set the desired height of the space between each ListTile
+              );
+            },
+            itemBuilder: (context, index) {
+              int currentindex = indexes[index];
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(
+                    25.0), // set the desired border radius value
+                child: Card(
+                  color: const Color.fromARGB(255, 190, 188, 188),
+                  elevation: 3.0,
+                  shadowColor: const Color.fromARGB(255, 188, 184, 184),
+                  child: SizedBox(
+                    height: 70.0, // set the desired height of the Card
+                    width: double
+                        .infinity, // set the width to match the parent ListView
+                    child: InkWell(
+                      onTap: () {
+                        //_audioPlayer.stop();
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => NowPlaying(
+                              index: currentindex,
+                            ),
+                          ),
+                        );
+                      },
+                      child: ListTile(
+                        leading: QueryArtworkWidget(
+                          controller: _audioQuery,
+                          id: ids[currentindex],
+                          type: ArtworkType.AUDIO,
+                          nullArtworkWidget: const Icon(
+                            Icons.music_note,
+                            color: Colors.amber,
+                            size: 50,
                           ),
                         ),
-                      );
-                    },
-                    child: ListTile(
-                      leading: QueryArtworkWidget(
-                        controller: _audioQuery,
-                        id: ids[currentindex],
-                        type: ArtworkType.AUDIO,
+                        title: Text(
+                          songNames[currentindex],
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        subtitle: Text(
+                          artistNames[currentindex]!,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        tileColor: const Color.fromARGB(255, 250, 250, 251),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                setState(() {
+                                  indexes.remove(currentindex);
+                                });
+                                deleteSongFromFavorite(currentindex);
+                                Fluttertoast.showToast(
+                                  msg: 'Song Removed from Favorites',
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 27, 164, 179),
+                                );
+                              },
+                              icon: const Icon(
+                                Icons.delete_outline_rounded,
+                                color: Color.fromARGB(255, 27, 164, 179),
+                              ),
+                            ),
+                          ],
+                        ), // set the background color based on the view mode
                       ),
-                      title: Text(
-                        songNames[currentindex],
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      subtitle: Text(
-                        artistNames[currentindex]!,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      tileColor: const Color.fromARGB(255, 250, 250, 251),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            onPressed: () {
-                              setState(() {
-                                indexes.remove(currentindex);
-                              });
-                              deleteSongFromFavorite(currentindex);
-                              Fluttertoast.showToast(
-                                msg: 'Song Removed from Favorites',
-                                backgroundColor:
-                                    const Color.fromARGB(255, 27, 164, 179),
-                              );
-                            },
-                            icon: const Icon(Icons.delete_outline_rounded,
-                                color: Colors.amber),
-                          ),
-                        ],
-                      ), // set the background color based on the view mode
                     ),
                   ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );
@@ -144,16 +162,5 @@ class _FavoritePageState extends State<FavoritePage> {
   void clearFavoritedb() async {
     var favorite = await Hive.openBox<AllSongs>('allSongs');
     await favorite.clear();
-  }
-}
-
-Future<void> deleteSongFromFavorite(int songID) async {
-  var favorite = await Hive.openBox<AllSongs>('allSongs');
-  for (int i = 0; i < favorite.length; i++) {
-    var song = favorite.getAt(i);
-    if (song != null && song.songID == songID) {
-      await favorite.deleteAt(i);
-      break;
-    }
   }
 }

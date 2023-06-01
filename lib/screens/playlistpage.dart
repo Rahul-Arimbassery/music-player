@@ -1,183 +1,15 @@
-// import 'package:flutter/material.dart';
-// import 'package:musicuitest/widgets/playlistdetailedpage.dart';
-
-// class PlaylistPage extends StatefulWidget {
-//   const PlaylistPage({Key? key}) : super(key: key);
-
-//   @override
-//   State<PlaylistPage> createState() => _PlaylistPageState();
-// }
-
-// class _PlaylistPageState extends State<PlaylistPage> {
-//   bool isDetailsPageVisible = false;
-//   late String selectedPlaylistName;
-
-//   void openDetailsPage(String playlistName) {
-//     setState(() {
-//       isDetailsPageVisible = true;
-//       selectedPlaylistName = playlistName;
-//     });
-//   }
-
-//   void closeDetailsPage() {
-//     setState(() {
-//       isDetailsPageVisible = false;
-//     });
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         shadowColor: const Color.fromARGB(255, 27, 164, 179),
-//         elevation: 10,
-//         backgroundColor: Colors.black,
-//         title: const Text(
-//           "Play List",
-//           style: TextStyle(color: Color.fromARGB(255, 27, 164, 179),),
-//         ),
-//       ),
-//       body: isDetailsPageVisible
-//           ? PlaylistDetailsPage(
-//               playlistName: selectedPlaylistName,
-//               onClose: closeDetailsPage,
-//             )
-//           : Padding(
-//               padding: const EdgeInsets.only(left:60.0,top: 30,),
-//               child: Column(
-//                 children: [
-//                   Row(
-//                     children: [
-//                       InkWell(
-//                         onTap: () => openDetailsPage('Playlist 1'),
-//                         child: Container(
-//                           height: 140,
-//                           width: 120,
-//                           decoration: BoxDecoration(
-//                             borderRadius: BorderRadius.circular(20),
-//                             color: const Color.fromARGB(255, 235, 238, 235),
-//                           ),
-//                           child: Center(
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(25.0),
-//                               child: Column(
-//                                 children: [
-//                                   Image.asset("asset/images/music-band.png"),
-//                                   const SizedBox(
-//                                     height: 20,
-//                                   ),
-//                                   const Text('Playlist 1',
-//                                       style: TextStyle(color: Colors.black)),
-//                                 ],
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                         width: 30,
-//                       ),
-//                       InkWell(
-//                         onTap: () => openDetailsPage('Playlist 2'),
-//                         child: Container(
-//                           height: 140,
-//                           width: 120,
-//                           decoration: BoxDecoration(
-//                             borderRadius: BorderRadius.circular(20),
-//                             color: const Color.fromARGB(255, 235, 238, 235),
-//                           ),
-//                           child: Center(
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(25.0),
-//                               child: Column(
-//                                 children: [
-//                                   Image.asset("asset/images/music-band.png"),
-//                                   const SizedBox(
-//                                     height: 20,
-//                                   ),
-//                                   const Text('Playlist 2',
-//                                       style: TextStyle(color: Colors.black)),
-//                                 ],
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                   const SizedBox(
-//                     height: 40,
-//                   ),
-//                   Row(
-//                     children: [
-//                       InkWell(
-//                         onTap: () => openDetailsPage('Playlist 3'),
-//                         child: Container(
-//                           height: 140,
-//                           width: 120,
-//                           decoration: BoxDecoration(
-//                             borderRadius: BorderRadius.circular(20),
-//                             color: const Color.fromARGB(255, 235, 238, 235),
-//                           ),
-//                           child: Center(
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(25.0),
-//                               child: Column(
-//                                 children: [
-//                                   Image.asset("asset/images/music-band.png"),
-//                                   const SizedBox(
-//                                     height: 20,
-//                                   ),
-//                                   const Text('Playlist 3',
-//                                       style: TextStyle(color: Colors.black)),
-//                                 ],
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                       const SizedBox(
-//                         width: 30,
-//                       ),
-//                       InkWell(
-//                         onTap:() => openDetailsPage('Playlist 4'),
-//                         child: Container(
-//                           height: 140,
-//                           width: 120,
-//                           decoration: BoxDecoration(
-//                             borderRadius: BorderRadius.circular(20),
-//                             color: const Color.fromARGB(255, 235, 238, 235),
-//                           ),
-//                           child: Center(
-//                             child: Padding(
-//                               padding: const EdgeInsets.all(25.0),
-//                               child: Column(
-//                                 children: [
-//                                   Image.asset("asset/images/music-band.png"),
-//                                   const SizedBox(
-//                                     height: 20,
-//                                   ),
-//                                   const Text('Playlist 4',
-//                                       style: TextStyle(color: Colors.black)),
-//                                 ],
-//                               ),
-//                             ),
-//                           ),
-//                         ),
-//                       ),
-//                     ],
-//                   ),
-//                 ],
-//               ),
-//             ),
-//     );
-//   }
-// }
-
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 import 'package:flutter/material.dart';
-import 'package:musicuitest/screens/addplayltist.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:musicuitest/homepage.dart';
+import 'package:musicuitest/screens/navigatorpage.dart';
+import 'package:musicuitest/widgets/playlistitems.dart';
+
+import '../models/playlist.dart';
+import '../models/playlistnamearray.dart';
+
+List<int> indexesPlaylist = [];
 
 class PlaylistPage extends StatefulWidget {
   const PlaylistPage({super.key});
@@ -187,37 +19,428 @@ class PlaylistPage extends StatefulWidget {
 }
 
 class _PlaylistPageState extends State<PlaylistPage> {
+  String playlistName = '';
+  List<String> playlistNames = [];
+  bool deletePressed = false;
+
+  @override
+  void initState() {
+    super.initState();
+    getPlaylists();
+  }
+
+  void getPlaylists() async {
+    final playlistBox = Hive.box<Playlist>('playlists');
+    setState(() {
+      playlistNames =
+          playlistBox.values.map((playlist) => playlist.playlistName).toList();
+    });
+  }
+
+  void showAddPlaylistDialog() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Add Playlist'),
+          content: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 1.5),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: TextField(
+              onChanged: (value) {
+                setState(() {
+                  playlistName = value;
+                });
+              },
+              decoration: const InputDecoration(
+                hintText: 'Enter playlist name',
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () async {
+                setState(() {
+                  playlistNames.add(playlistName);
+                });
+
+                Navigator.pop(context); // Close the dialog
+
+                final playlistBox = Hive.box<Playlist>('playlists');
+                final playlist = Playlist(
+                  playlistName: playlistName,
+                  playlistIndex: playlistBox.length,
+                );
+
+                setState(() async {
+                  await playlistBox.add(playlist);
+                });
+              },
+              child: const Text('Create'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text('Close'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void deletePlaylist(int index) async {
+    final playlistBox = Hive.box<Playlist>('playlists');
+    await playlistBox.deleteAt(index);
+    setState(() {
+      playlistNames.removeAt(index);
+    });
+  }
+
+  Future<void> openPlaylist(int index) async {
+    var box = await Hive.openBox<Playlistarray>('playlistsarray');
+    var playlistArray = box.get(playlistNames[index]);
+    indexesPlaylist = playlistArray!.playlistIndexarray;
+
+    if (!deletePressed) {
+      if (pagestatus != true) {
+        if (!indexesPlaylist.contains(playlistIndex)) {
+          setState(() {
+            indexesPlaylist.add(playlistIndex);
+            playlistNames.add(playlistNames[index]);
+          });
+
+          Fluttertoast.showToast(
+            msg: 'Song Added to Playlist Successfully!!!',
+            backgroundColor: const Color.fromARGB(255, 27, 164, 179),
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+          );
+
+          var box = await Hive.openBox<Playlistarray>('playlistsarray');
+          var playlistArray = Playlistarray(
+            playlistName: playlistNames[index],
+            playlistIndexarray: indexesPlaylist,
+          );
+
+          await box.put(playlistArray.playlistName, playlistArray);
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const NavigatorPage(),
+            ),
+          );
+        } else {
+          Fluttertoast.showToast(
+            msg: 'Song is already in the playlist!',
+            backgroundColor: const Color.fromARGB(255, 255, 0, 0),
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+          );
+        }
+      }
+
+      // Perform the navigation logic to open the playlist
+      if (pagestatus == true) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PlaylistDetailPage(
+              playlistName: playlistNames[index],
+            ),
+          ),
+        );
+      }
+    } else {
+      deletePlaylist(index);
+      deletePressed = false; // Reset the flag after deletion
+    }
+  }
+
+  void _showEditPlaylistDialog(int index) async {
+    final playlistBox = Hive.box<Playlist>('playlists');
+    String updatedName = playlistNames[index];
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Edit Playlist Name'),
+          content: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.black, width: 1.5),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: TextField(
+              onChanged: (value) {
+                updatedName = value; // Update the value of the local variable
+              },
+              controller: TextEditingController(text: playlistNames[index]),
+              decoration: const InputDecoration(
+                hintText: 'Enter playlist name',
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () async {
+                setState(() {
+                  playlistNames[index] = updatedName; // Update the UI
+                });
+                Navigator.pop(context); // Close the dialog
+                final playlist = Playlist(
+                  playlistName: updatedName,
+                  playlistIndex: index,
+                );
+                await playlistBox.putAt(index, playlist);
+              },
+              child: const Text('Save'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(
+                    context); // Close the dialog // Update the database
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deletePlaylist(int index) {
+    final playlistBox = Hive.box<Playlist>('playlists');
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Delete Playlist'),
+          content: const Text('Are you sure you want to delete this playlist?'),
+          actions: [
+            ElevatedButton(
+              onPressed: () async {
+                setState(() {
+                  playlistNames.removeAt(index);
+                });
+                Navigator.pop(context); // Close the dialog
+                await playlistBox.deleteAt(index);
+              },
+              child: const Text('Delete'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        //automaticallyImplyLeading: true,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            pagestatus = false;
+            Navigator.push<int>(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const NavigatorPage(),
+              ),
+            );
+          },
+        ),
         shadowColor: const Color.fromARGB(255, 27, 164, 179),
         elevation: 10,
         backgroundColor: Colors.black,
-        title: const Text(
-          "Playlist",
-          style: TextStyle(color: Color.fromARGB(255, 27, 164, 179)),
+        title: Expanded(
+          child: Row(
+            children: [
+              const Text('PLAYLIST'),
+              const SizedBox(width: 90),
+              const Text(
+                'CREATE\nYour list',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 27, 164, 179),
+                  fontSize: 11.5,
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.add_box, size: 35),
+                color: Colors.white,
+                onPressed: () {
+                  showAddPlaylistDialog(); // Show the add playlist dialog
+                },
+              ),
+            ],
+          ),
         ),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'No Playlist created.',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddPlaylistPage(),
+      body: SingleChildScrollView(
+        child: Container(
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              if (playlistNames.isEmpty)
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Text(
+                      '',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 27, 164, 179),
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+                    Text(
+                      'Playlist is Empty.Create One.',
+                      style: GoogleFonts.acme(
+                        textStyle: const TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ],
+                ),
+              if (playlistNames.isNotEmpty)
+                Column(
+                  children: List<Widget>.generate(
+                    (playlistNames.length / 2).ceil(),
+                    (index) {
+                      final startIndex = index * 2;
+                      final endIndex = startIndex + 1;
+                      if (endIndex < playlistNames.length) {
+                        return Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Center(
+                                    child: _buildPlaylistContainer(startIndex)),
+                              ),
+                            ),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.all(20.0),
+                                child: Center(
+                                    child: _buildPlaylistContainer(endIndex)),
+                              ),
+                            ),
+                          ],
+                        );
+                      } else {
+                        return Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: Center(
+                              child: _buildPlaylistContainer(startIndex)),
+                        );
+                      }
+                    },
                   ),
-                );
-              },
-              child: const Text('Create Playlist'),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPlaylistContainer(int index) {
+    bool deletePressed = false; // Flag to track delete button press
+    String editedName = playlistNames[index]; // Edited playlist name
+
+    return GestureDetector(
+      onTap: () {
+        if (!deletePressed) {
+          openPlaylist(index);
+        }
+      },
+      child: Container(
+        height: 150,
+        width: 250,
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        decoration: BoxDecoration(
+          color: Colors.blueGrey,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Image.asset(
+              'asset/images/music-band.png',
+              height: 100,
+              width: 100,
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(8),
+                    topRight: Radius.circular(8),
+                  ),
+                ),
+                child: Text(
+                  playlistNames[index],
+                  style: const TextStyle(color: Colors.white, fontSize: 16),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.5),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(8),
+                    bottomRight: Radius.circular(8),
+                  ),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.delete),
+                      color: Colors.white,
+                      onPressed: () {
+                        _deletePlaylist(index);
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      color: Colors.white,
+                      onPressed: () {
+                        _showEditPlaylistDialog(index);
+                      },
+                    ),
+                  ],
+                ),
+              ),
             ),
           ],
         ),

@@ -2,16 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:musicuitest/globalpage.dart';
-import 'package:musicuitest/screens/addplayltist.dart';
-import 'package:musicuitest/screens/favoritepage.dart';
 import 'package:musicuitest/screens/nowplaying.dart';
+import 'package:musicuitest/screens/playlistpage.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-
 import 'models/allsongs.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';         
 
-
-
+late List<bool> _isPressedList;
+int playlistIndex = 0;
 final OnAudioQuery _audioQuery = OnAudioQuery();
 SharedPreferences? _prefs;
 
@@ -25,19 +23,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  //final OnAudioQuery _audioQuery = OnAudioQuery();
 
-  late List<bool> _isPressedList; // declare the _isPressedList variable
   bool _hasPermission = false;
   bool _isGrid = false; // new variable to keep track of the view mode
   Future<List<SongModel>>? _futureResult;
-  int count = 0;
 
   @override
   void initState() {
     super.initState();
     initializePreferences();
-
     LogConfig logConfig = LogConfig(logType: LogType.DEBUG);
     _audioQuery.setLogConfig(logConfig);
     checkAndRequestPermissions();
@@ -51,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void loadButtonStates() {
-    int itemCount = 500;
+    int itemCount = 100;
     setState(() {
       _isPressedList = List.generate(
         itemCount,
@@ -66,7 +60,6 @@ class _HomePageState extends State<HomePage> {
     );
     _hasPermission ? setState(() {}) : null;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -110,36 +103,41 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
       backgroundColor: const Color.fromARGB(255, 251, 251, 252),
-      body: SafeArea(
-        child: Center(
-          child: !_hasPermission
-              ? noAccessToLibraryWidget()
-              : FutureBuilder<List<SongModel>>(
-                  future: _futureResult,
-                  builder: (context, item) {
-                    if (item.hasError) {
-                      return Text(item.error.toString());
-                    }
+      body: Container(
+        decoration: const BoxDecoration(
+            gradient: RadialGradient(
+          colors: [
+            Color.fromARGB(255, 61, 61, 58),
+            Color.fromARGB(255, 254, 254, 253),
+          ],
+          center: Alignment.topLeft,
+          radius: 1.2,
+        )),
+        child: SafeArea(
+          child: Center(
+            child: !_hasPermission
+                ? noAccessToLibraryWidget()
+                : FutureBuilder<List<SongModel>>(
+                    future: _futureResult,
+                    builder: (context, item) {
+                      if (item.hasError) {
+                        return Text(item.error.toString());
+                      }
 
-                    if (item.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator();
-                    }
+                      if (item.connectionState == ConnectionState.waiting) {
+                        return const CircularProgressIndicator();
+                      }
 
-                    if (item.data == null || item.data!.isEmpty) {
-                      return const Text("No MP3 songs found!");
-                    }
+                      if (item.data == null || item.data!.isEmpty) {
+                        return const Text("No MP3 songs found!");
+                      }
 
-                    //Generate and initialize _isPressedList based on item.data length
-                    // if (count == 0) {
-                    //   _isPressedList =
-                    //       List<bool>.filled(item.data!.length, false);
-                    // }
-
-                    return _isGrid
-                        ? _buildGridView(item)
-                        : _buildListView(item);
-                  },
-                ),
+                      return _isGrid
+                          ? _buildGridView(item)
+                          : _buildListView(item);
+                    },
+                  ),
+          ),
         ),
       ),
     );
@@ -234,6 +232,11 @@ class _HomePageState extends State<HomePage> {
                                 controller: _audioQuery,
                                 id: item.data![index].id,
                                 type: ArtworkType.AUDIO,
+                                nullArtworkWidget: const Icon(
+                                  Icons.music_note,
+                                  color: Colors.amber,
+                                  size: 50,
+                                ),
                               ),
                               title: Text(
                                 item.data![index].title,
@@ -253,7 +256,6 @@ class _HomePageState extends State<HomePage> {
                                       setState(() {
                                         _isPressedList[index] =
                                             !_isPressedList[index];
-
                                         //count = 1;
                                       });
                                       if (_isPressedList[index]) {
@@ -280,21 +282,6 @@ class _HomePageState extends State<HomePage> {
                                       _prefs?.setBool('buttonState$index',
                                           _isPressedList[index]);
                                     },
-                                    // icon: Container(
-                                    //   color: _isPressedList[index]
-                                    //       ? Colors.white
-                                    //       : Colors.transparent,
-                                    //   child: Icon(
-                                    //     Icons.favorite,
-                                    //     color: _isPressedList[index]
-                                    //         ? const Color.fromARGB(
-                                    //             255, 27, 164, 179)
-                                    //         : const Color.fromARGB(
-                                    //             255, 139, 135, 135),
-                                    //   ),
-                                    // ),
-
-                                    // Assuming you have another boolean status named '_isStatus2True'
                                     icon: Container(
                                       color: _isPressedList[index]
                                           ? Colors.white
@@ -311,12 +298,18 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   IconButton(
                                     onPressed: () {
+                                      playlistIndex = index; //for playlist add
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              AddPlaylistPage(),
+                                              const PlaylistPage(),
                                         ),
+                                      );
+                                      Fluttertoast.showToast(
+                                        msg: 'Select playlist to add song',
+                                        backgroundColor: const Color.fromARGB(
+                                            255, 27, 164, 179),
                                       );
                                     },
                                     icon: const Icon(Icons.playlist_add),
@@ -383,6 +376,11 @@ class _HomePageState extends State<HomePage> {
                                 controller: _audioQuery,
                                 id: item.data![index].id,
                                 type: ArtworkType.AUDIO,
+                                nullArtworkWidget: const Icon(
+                                  Icons.music_note,
+                                  color: Colors.amber,
+                                  size: 50,
+                                ),
                               ),
                             ),
                           ),
@@ -391,9 +389,19 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(item.data![index].title),
+                                Center(
+                                  child: Text(
+                                    item.data![index].title,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
                                 const SizedBox(height: 8),
-                                Text(item.data![index].artist ?? "No Artist"),
+                                Center(
+                                  child: Text(
+                                    item.data![index].artist ?? "No Artist",
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
                                 const SizedBox(height: 8),
                                 Row(
                                   mainAxisAlignment:
@@ -405,6 +413,31 @@ class _HomePageState extends State<HomePage> {
                                           _isPressedList[index] =
                                               !_isPressedList[index];
                                         });
+                                        if (_isPressedList[index]) {
+                                          //addtoFavoritedb(index);
+                                          addtoFavoritedb(index);
+                                          Fluttertoast.showToast(
+                                            msg: 'Song Added to Favorites',
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    255, 27, 164, 179),
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                          );
+                                        } else {
+                                          deleteSongFromFavorite(index);
+                                          Fluttertoast.showToast(
+                                            msg: 'Song Removed from Favorites',
+                                            backgroundColor:
+                                                const Color.fromARGB(
+                                                    255, 27, 164, 179),
+                                            toastLength: Toast.LENGTH_SHORT,
+                                            gravity: ToastGravity.BOTTOM,
+                                          );
+                                        }
+                                        // Save the button state to shared preferences
+                                        _prefs?.setBool('buttonState$index',
+                                            _isPressedList[index]);
                                       },
                                       icon: Container(
                                         color: _isPressedList[index]
@@ -421,12 +454,19 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     IconButton(
                                       onPressed: () {
+                                        playlistIndex =
+                                            index; //for playlist add
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                AddPlaylistPage(),
+                                                const PlaylistPage(),
                                           ),
+                                        );
+                                        Fluttertoast.showToast(
+                                          msg: 'Select playlist to add song',
+                                          backgroundColor: const Color.fromARGB(
+                                              255, 27, 164, 179),
                                         );
                                       },
                                       icon: const Icon(Icons.playlist_add),
@@ -458,4 +498,17 @@ addtoFavoritedb(int index) async {
 void removeFromFavoritedb(int index) async {
   var favorite = await Hive.openBox<AllSongs>('allSongs');
   favorite.deleteAt(index);
+}
+
+Future<void> deleteSongFromFavorite(int songID) async {
+  var favorite = await Hive.openBox<AllSongs>('allSongs');
+  for (int i = 0; i < favorite.length; i++) {
+    var song = favorite.getAt(i);
+    if (song != null && song.songID == songID) {
+      await favorite.deleteAt(i);
+      _isPressedList[songID] = false;
+      _prefs?.setBool('buttonState$songID', _isPressedList[songID]);
+      break;
+    }
+  }
 }
